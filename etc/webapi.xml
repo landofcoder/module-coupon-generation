@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+	<route method="GET" url="/V1/lof-couponcode/generatecoupon">
+		<service class="Lof\CouponCode\Api\CouponRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Lof_CouponCode::coupon_save"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/search">
+		<service class="Lof\CouponCode\Api\CouponRepositoryInterface" method="getList"/>
+		<resources>
+			<resource ref="Lof_CouponCode::coupon"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/:couponId">
+		<service class="Lof\CouponCode\Api\CouponRepositoryInterface" method="getById"/>
+		<resources>
+			<resource ref="Lof_CouponCode::coupon"/>
+		</resources>
+	</route>
+	<route method="PUT" url="/V1/lof-couponcode/:couponId">
+		<service class="Lof\CouponCode\Api\CouponRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Lof_CouponCode::coupon_save"/>
+		</resources>
+	</route>
+	<route method="DELETE" url="/V1/lof-couponcode/:couponId">
+		<service class="Lof\CouponCode\Api\CouponRepositoryInterface" method="deleteById"/>
+		<resources>
+			<resource ref="Lof_CouponCode::coupon_delete"/>
+		</resources>
+	</route>
+	<route method="POST" url="/V1/lof-couponcode/rule">
+		<service class="Lof\CouponCode\Api\RuleRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="anonymous"/><!-- <resource ref="Lof_CouponCode::rule_edit"/> -->
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/:ruleId">
+		<service class="Lof\CouponCode\Api\RuleRepositoryInterface" method="getById"/>
+		<resources>
+			<resource ref="Lof_CouponCode::rule"/>
+		</resources>
+	</route>
+	<route method="PUT" url="/V1/lof-couponcode/:ruleId">
+		<service class="Lof\CouponCode\Api\RuleRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Lof_CouponCode::rule_save"/>
+		</resources>
+	</route>
+	<route method="DELETE" url="/V1/lof-couponcode/rule/:ruleId">
+		<service class="Lof\CouponCode\Api\RuleRepositoryInterface" method="deleteById"/>
+		<resources>
+			<resource ref="Lof_CouponCode::rule_delete"/>
+		</resources>
+	</route>
+	<route method="POST" url="/V1/lof-couponcode/log">
+		<service class="Lof\CouponCode\Api\LogRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Lof_CouponCode::log_save"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/:logId">
+		<service class="Lof\CouponCode\Api\LogRepositoryInterface" method="getById"/>
+		<resources>
+			<resource ref="Lof_CouponCode::log"/>
+		</resources>
+	</route>
+	<route method="PUT" url="/V1/lof-couponcode/:logId">
+		<service class="Lof\CouponCode\Api\LogRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Lof_CouponCode::log_save"/>
+		</resources>
+	</route>
+	<route method="DELETE" url="/V1/lof-couponcode/:logId">
+		<service class="Lof\CouponCode\Api\LogRepositoryInterface" method="deleteById"/>
+		<resources>
+			<resource ref="Lof_CouponCode::log_delete"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/coupon/:alias">
+		<service class="Lof\CouponCode\Api\CouponManagementInterface" method="getCouponAlias"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/listcoupon">
+		<service class="Lof\CouponCode\Api\CouponManagementInterface" method="getCouponByConditions"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="PUT" url="/V1/lof-couponcode/coupon">
+		<service class="Lof\CouponCode\Api\CouponManagementInterface" method="putCoupon"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/rule">
+		<service class="Lof\CouponCode\Api\RuleManagementInterface" method="getRule"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="DELETE" url="/V1/lof-couponcode/rule">
+		<service class="Lof\CouponCode\Api\RuleManagementInterface" method="deleteRule"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="PUT" url="/V1/lof-couponcode/rule">
+		<service class="Lof\CouponCode\Api\RuleManagementInterface" method="putRule"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/lof-couponcode/log/:coupon_code/:email">
+		<service class="Lof\CouponCode\Api\LogManagementInterface" method="getLog"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+</routes>

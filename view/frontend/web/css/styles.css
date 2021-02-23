@@ -1,0 +1,14 @@
+.data-coupon td.row-value,.data-order-status td.row-value {
+    font-weight: bold;
+}
+.data-order-status td.row-value{
+	color: #2196F3;
+}
+td.row-label {
+    font-weight: bold;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+}
+td.row-value {
+    border: 1px solid #ccc;
+}

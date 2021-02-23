@@ -1,0 +1,319 @@
+"Save Coupon Code","Save Coupon Code"
+"Save and Continue Edit","Save and Continue Edit"
+"Edit Form '%1'","Edit Form '%1'"
+"New Form","New Form"
+"General Information","General Information"
+"Coupon Alias","Coupon Alias"
+"Coupon Code","Coupon Code"
+"Email Address","Email Address"
+"Usage Limit","Usage Limit"
+"Usage Per Customer","Usage Per Customer"
+"Time Used","Time Used"
+"Expiration Date","Expiration Date"
+"Edit Rule","Edit Rule"
+"Rule Id","Rule Id"
+"Edit Customer","Edit Customer"
+"Customer Id","Customer Id"
+"Coupon Information","Coupon Information"
+ID,ID
+Code,Code
+Alias,Alias
+Email,Email
+Status,Status
+Action,Action
+"Customer Coupon Code","Customer Coupon Code"
+"Coupon Code Generate","Coupon Code Generate"
+"Generate Code for Visitor email","Generate Code for Visitor email"
+"Visitor Email","Visitor Email"
+Rule,Rule
+"Generate Coupon","Generate Coupon"
+"Generate Coupon(s) for Customers ","Generate Coupon(s) for Customers "
+"Use mass-action to generate coupons for existing customers","Use mass-action to generate coupons for existing customers"
+"We can't find records for this period.","We can't find records for this period."
+"Import Configuration","Import Configuration"
+"Import Coupons Via CSV","Import Coupons Via CSV"
+"Coupon Code Import","Coupon Code Import"
+"Upload CSV File","Upload CSV File"
+"Split Symbol","Split Symbol"
+"Input the delimiter to read data of CSV file. For example: <strong>;</strong> <br/>Default: <strong>,</strong>","Input the delimiter to read data of CSV file. For example: <strong>;</strong> <br/>Default: <strong>,</strong>"
+"Configuration Scope","Configuration Scope"
+"Imported configuration settings will be applied to selected scope (selected store view or website). If you're not sure what is 'scope' in Magento system configuration.<br/><br/>It is highly recommended to leave the default scope <strong>'Default Config'</strong>. In this case imported configuration will be applied to all existing store views.","Imported configuration settings will be applied to selected scope (selected store view or website). If you're not sure what is 'scope' in Magento system configuration.<br/><br/>It is highly recommended to leave the default scope <strong>'Default Config'</strong>. In this case imported configuration will be applied to all existing store views."
+"New Coupon Log","New Coupon Log"
+"Full Name","Full Name"
+"Edit Order","Edit Order"
+"Order Id","Order Id"
+"Track the status on frontend","Track the status on frontend"
+"Scan QrCode","Scan QrCode"
+"Track Link","Track Link"
+"IP Address","IP Address"
+"Browser Info","Browser Info"
+"Order Information","Order Information"
+"Order Status","Order Status"
+"Order status","Order status"
+"Order Total","Order Total"
+"Order Date","Order Date"
+"Coupon Logs Information","Coupon Logs Information"
+"Manage Rules","Manage Rules"
+"New Rule","New Rule"
+"Manage Coupon Code","Manage Coupon Code"
+"Manage Coupon Logs","Manage Coupon Logs"
+"Impot Coupon Codes","Impot Coupon Codes"
+"Generate Coupon Code","Generate Coupon Code"
+Report,Report
+Settings,Settings
+Guide,Guide
+"Get Support","Get Support"
+"Coupons Usage Report","Coupons Usage Report"
+"Show Report","Show Report"
+Filter,Filter
+From,From
+To,To
+"Show By","Show By"
+Day,Day
+Week,Week
+Month,Month
+Quarter,Quarter
+Year,Year
+"Show period time by option.","Show period time by option."
+Any,Any
+Specified,Specified
+"Applies to Any of the Specified Order Statuses","Applies to Any of the Specified Order Statuses"
+"Order Created","Order Created"
+"Order Updated","Order Updated"
+"Match Period To","Match Period To"
+Total,Total
+Orders,Orders
+Items,Items
+Subtotal,Subtotal
+Discount,Discount
+Invoiced,Invoiced
+Refunded,Refunded
+Revenue,Revenue
+CSV,CSV
+"Excel XML","Excel XML"
+"Create New Rule","Create New Rule"
+"Delete Email","Delete Email"
+Actions,Actions
+"Apply the rule only to cart items matching the following conditions (leave blank for all items).","Apply the rule only to cart items matching the following conditions (leave blank for all items)."
+"Apply To","Apply To"
+Apply,Apply
+"Percent of product price discount","Percent of product price discount"
+"Fixed amount discount","Fixed amount discount"
+"Fixed amount discount for whole cart","Fixed amount discount for whole cart"
+"Buy X get Y free (discount amount is Y)","Buy X get Y free (discount amount is Y)"
+"Discount Amount","Discount Amount"
+"Maximum Qty Discount is Applied To","Maximum Qty Discount is Applied To"
+"Discount Qty Step (Buy X)","Discount Qty Step (Buy X)"
+"Apply to Shipping Amount","Apply to Shipping Amount"
+"Coupon Lenght","Coupon Lenght"
+"Coupon Length","Coupon Length"
+"Code Format","Code Format"
+"Apply the rule only if the following conditions are met (leave blank for all products).","Apply the rule only if the following conditions are met (leave blank for all products)."
+Conditions,Conditions
+"Code Length","Code Length"
+"Excluding prefix, suffix and separators.","Excluding prefix, suffix and separators."
+"Code Prefix","Code Prefix"
+"Code Suffix","Code Suffix"
+"Dash Every X Characters","Dash Every X Characters"
+"If empty no separation.","If empty no separation."
+"Rule Name","Rule Name"
+"Rule Identifier Key","Rule Identifier Key"
+Description,Description
+Websites,Websites
+"Customer Groups","Customer Groups"
+"Uses Per Customer","Uses Per Customer"
+"Uses per Coupon","Uses per Coupon"
+Priority,Priority
+"Public In RSS Feed","Public In RSS Feed"
+Yes,Yes
+No,No
+"Coupon Code Status","Coupon Code Status"
+"Limit Number Coupons Was Generated Per Email","Limit Number Coupons Was Generated Per Email"
+"Limit number coupons can generated for a email address.","Limit number coupons can generated for a email address."
+"Enable check email address when use coupon code","Enable check email address when use coupon code"
+"Enable/disable check exactly email address when apply coupon code on shopping cart and checkout page. If not equal, the coupon code can not apply.","Enable/disable check exactly email address when apply coupon code on shopping cart and checkout page. If not equal, the coupon code can not apply."
+"Coupons Generated","Coupons Generated"
+"Rule Information","Rule Information"
+"Coupon Usage","Coupon Usage"
+"My Coupon Code","My Coupon Code"
+"This Coupon no longer exists.","This Coupon no longer exists."
+"Edit Coupon","Edit Coupon"
+"New Coupon","New Coupon"
+Coupons,Coupons
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"The wrong coupon is specified.","The wrong coupon is specified."
+"You saved the Coupon.","You saved the Coupon."
+"Something went wrong while saving the coupon data. Please review the error log.","Something went wrong while saving the coupon data. Please review the error log."
+"A coupon code has been sent to %1.","A coupon code has been sent to %1."
+"A coupon code has been generated.","A coupon code has been generated."
+"Something went wrong while send coupon code. Please review the error log.","Something went wrong while send coupon code. Please review the error log."
+"The rule limit number coupons were generated for email %1.","The rule limit number coupons were generated for email %1."
+"Did not found the coupon rule.","Did not found the coupon rule."
+"A total of %1 record(s) were updated.","A total of %1 record(s) were updated."
+"Not found coupon rule to generate code. Please review the error log.","Not found coupon rule to generate code. Please review the error log."
+"Something went wrong while generate coupon code. Please review the error log.","Something went wrong while generate coupon code. Please review the error log."
+"Import Coupons","Import Coupons"
+"Can't import data<br/> %1","Can't import data<br/> %1"
+"Import successfully","Import successfully"
+"Required there columns: code and rule_id","Required there columns: code and rule_id"
+"This Coupon log no longer exists.","This Coupon log no longer exists."
+"Edit Coupon Logs","Edit Coupon Logs"
+"New Coupon Logs","New Coupon Logs"
+"Coupons Logs","Coupons Logs"
+"Coupon Code Logs","Coupon Code Logs"
+"Logs Coupon Code","Logs Coupon Code"
+Reports,Reports
+"Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>.","Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>."
+Sales,Sales
+"Sales By Coupon","Sales By Coupon"
+"You deleted the rule.","You deleted the rule."
+"We can't find a rule to delete.","We can't find a rule to delete."
+"This Rule no longer exists.","This Rule no longer exists."
+Rules,Rules
+"A total of %1 record(s) have been disabled.","A total of %1 record(s) have been disabled."
+"A total of %1 record(s) have been enabled.","A total of %1 record(s) have been enabled."
+"The wrong rule is specified.","The wrong rule is specified."
+"You saved the Rule.","You saved the Rule."
+"Something went wrong while saving the rule data. Please review the error log.","Something went wrong while saving the rule data. Please review the error log."
+"My Coupons","My Coupons"
+"A coupon was generated for the account before.","A coupon was generated for the account before."
+"Rule is not exists.","Rule is not exists."
+"Missing rule id and email address.","Missing rule id and email address."
+"You received a coupon code:","You received a coupon code:"
+"We can not generate coupon code for you.","We can not generate coupon code for you."
+"Sales Info","Sales Info"
+"Conditions Combination","Conditions Combination"
+"Product Attribute","Product Attribute"
+"Total Sales","Total Sales"
+"Total Orders","Total Orders"
+"Total Reviews","Total Reviews"
+"Customer Behavior","Customer Behavior"
+"Customer Attribute","Customer Attribute"
+Name,Name
+Phone,Phone
+ZIP,ZIP
+Country,Country
+State/Province,State/Province
+"Customer Since","Customer Since"
+"Confirmed Email","Confirmed Email"
+"Account Created in","Account Created in"
+"Billing Address","Billing Address"
+"Shipping Address","Shipping Address"
+"Date of Birth","Date of Birth"
+"Date of Birth from","Date of Birth from"
+"Date of Birth to","Date of Birth to"
+"Tax VAT Number","Tax VAT Number"
+Gender,Gender
+"Street Address","Street Address"
+City,City
+Fax,Fax
+"VAT Number","VAT Number"
+Company,Company
+"Billing Firstname","Billing Firstname"
+"Billing Lastname","Billing Lastname"
+"Base Coupon Code Generation template (Default)","Base Coupon Code Generation template (Default)"
+"-- Please Select A Rule --","-- Please Select A Rule --"
+"-- Please select static block --","-- Please select static block --"
+"Discount (%1)","Discount (%1)"
+Enabled,Enabled
+Disabled,Disabled
+Rating,Rating
+Poisition,Poisition
+Alphanumberic,Alphanumberic
+Alphabetical,Alphabetical
+Numberic,Numberic
+Days,Days
+Weeks,Weeks
+Months,Months
+years,years
+"End Date must follow Start Date.","End Date must follow Start Date."
+"Total Items Quantity","Total Items Quantity"
+"Total Weight","Total Weight"
+"Payment Method","Payment Method"
+"Shipping Method","Shipping Method"
+"Shipping Postcode","Shipping Postcode"
+"Shipping Region","Shipping Region"
+"Shipping State/Province","Shipping State/Province"
+"Shipping Country","Shipping Country"
+"Product attribute combination","Product attribute combination"
+"Products subselection","Products subselection"
+"Conditions combination","Conditions combination"
+"Cart Attribute","Cart Attribute"
+"Item totals are not set for the rule.","Item totals are not set for the rule."
+"All Store Views","All Store Views"
+Edit,Edit
+View,View
+"Qr Code img","Qr Code img"
+"Grid Record","Grid Record"
+#,#
+"grid records not available.","grid records not available."
+"Sales order and coupon code detail","Sales order and coupon code detail"
+"Created Date","Created Date"
+"The tracking code do not exists. We can not found result!","The tracking code do not exists. We can not found result!"
+"Get Coupon Code","Get Coupon Code"
+Getting...,Getting...
+"Lof Coupon Code","Lof Coupon Code"
+"General Settings","General Settings"
+"Enable Module","Enable Module"
+"Email Sender","Email Sender"
+"Email Template","Email Template"
+"Show List Coupons On Customer Dashboard","Show List Coupons On Customer Dashboard"
+"Show/Hide List Coupons On Customer Dashboard.","Show/Hide List Coupons On Customer Dashboard."
+"Enable Redeem Coupon On Frontend","Enable Redeem Coupon On Frontend"
+"Redeem Coupon Only For Customer","Redeem Coupon Only For Customer"
+"Redeem Url","Redeem Url"
+"Allow Send Email","Allow Send Email"
+"Allow/Dont allow send email when genereate coupon code.","Allow/Dont allow send email when genereate coupon code."
+"Allow Save Log When Redeem Frontend Coupon","Allow Save Log When Redeem Frontend Coupon"
+"Allow/Dont allow Logged Coupon Code Info when generated on frontend.","Allow/Dont allow Logged Coupon Code Info when generated on frontend."
+"Allow Track Coupon Log On Frontend","Allow Track Coupon Log On Frontend"
+"Allow/Dont allow tracking coupon log on frontend.","Allow/Dont allow tracking coupon log on frontend."
+"Tracking Url","Tracking Url"
+"Input tracking url of coupon log. Default: track-coupon","Input tracking url of coupon log. Default: track-coupon"
+"Lof Redeem Coupon Form","Lof Redeem Coupon Form"
+"Widget Title","Widget Title"
+"This title will be showed as header of widget block. Empty to disable","This title will be showed as header of widget block. Empty to disable"
+"Addition Class","Addition Class"
+"This class is used to make owner style for the widget.","This class is used to make owner style for the widget."
+"Widget Title Class","Widget Title Class"
+"Input css class for widget heading title.","Input css class for widget heading title."
+"Pretext Class","Pretext Class"
+"Input css class for widget pretext.","Input css class for widget pretext."
+"Select CMS Static block as Pretext","Select CMS Static block as Pretext"
+"Discount Rule","Discount Rule"
+"Select a rule to generate coupon code.","Select a rule to generate coupon code."
+"Only Customer Can View","Only Customer Can View"
+"Show Email Field","Show Email Field"
+"Show Name Field","Show Name Field"
+"Show Qrcode","Show Qrcode"
+"Show Action Button","Show Action Button"
+"Qrcode Width","Qrcode Width"
+"Input qrcode width. Default: 200","Input qrcode width. Default: 200"
+"Qrcode Height","Qrcode Height"
+"Input qrcode height. Default: 200","Input qrcode height. Default: 200"
+"All Websites","All Websites"
+"Store View","Store View"
+Delete,Delete
+"Delete items","Delete items"
+"Are you sure you wan't to delete selected items?","Are you sure you wan't to delete selected items?"
+"Created At","Created At"
+"From At","From At"
+"Expires At","Expires At"
+"Uses Per Coupon","Uses Per Coupon"
+"Times Used","Times Used"
+Back,Back
+"Generate And Send Coupon","Generate And Send Coupon"
+"Generate and Send Coupons","Generate and Send Coupons"
+"Are you sure want to generate coupons for selected customers?","Are you sure want to generate coupons for selected customers?"
+Group,Group
+"Web Site","Web Site"
+"Confirmed email","Confirmed email"
+"Account Lock","Account Lock"
+"Qr code","Qr code"
+"Add New Rule","Add New Rule"
+Disable,Disable
+Enable,Enable
+"Coupon Generated","Coupon Generated"
+"Coupon Used","Coupon Used"
+"Usage Rate","Usage Rate"
+"Please save this qrcode or coupon code to get discount amount at checkout or use it to track log info by scan qrcode","Please save this qrcode or coupon code to get discount amount at checkout or use it to track log info by scan qrcode"

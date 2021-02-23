@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * LandofCoder
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the venustheme.com license that is
+ * available through the world-wide-web at this URL:
+ * http://venustheme.com/license
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   LandofCoder
+ * @package    Lof_CouponCode
+ * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
+ * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="lofcouponcode" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Lof Coupon Code</label>
+            <tab>landofcoder</tab>
+            <resource>Lof_CouponCode::config_couponcode</resource>
+            <group id="general_settings" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+                <field id="show" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                
+                <field id="barcode_folder" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Barcode Folder</label>
+                    <comment>Input Barcode Image Folder Path. Default: barcode</comment>
+                </field>
+
+                <field id="sender_email_identity" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                </field>
+                <field id="email_template" translate="label comment" type="select" sortOrder='20' showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Email Template</label>
+                    <source_model>Lof\CouponCode\Model\Config\Source\Emailtemplate</source_model>
+                </field>
+
+                <field id="show_on_customer" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show List Coupons On Customer Dashboard</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show/Hide List Coupons On Customer Dashboard.</comment>
+                </field>
+
+                <field id="allow_redeem" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Redeem Coupon On Frontend</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="redeem_only_customer" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Redeem Coupon Only For Customer</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends><field id="allow_redeem">1</field></depends>
+                </field>
+                <field id="route" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Redeem Url</label>
+                    <depends><field id="allow_redeem">1</field></depends>
+                </field>
+                
+                <field id="send_email_coupon" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Allow Send Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow/Dont allow send email when genereate coupon code.</comment>
+                    <depends><field id="allow_redeem">1</field></depends>
+                </field>
+
+                <field id="allow_log" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Allow Save Log When Redeem Frontend Coupon</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow/Dont allow Logged Coupon Code Info when generated on frontend.</comment>
+                </field>
+                <field id="allow_track_log" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Allow Track Coupon Log On Frontend</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow/Dont allow tracking coupon log on frontend.</comment>
+                    <depends><field id="allow_log">1</field></depends>
+                </field>
+                <field id="track_route" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tracking Url</label>
+                    <comment>Input tracking url of coupon log. Default: track-coupon</comment>
+                    <depends><field id="allow_log">1</field></depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

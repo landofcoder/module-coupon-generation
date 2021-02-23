@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * LandofCoder
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the venustheme.com license that is
+ * available through the world-wide-web at this URL:
+ * http://venustheme.com/license
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   LandofCoder
+ * @package    Lof_CouponCode
+ * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
+ * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+		<add id="Lof_CouponCode::couponcode" title="Coupon Code" module="Lof_CouponCode" sortOrder="10" resource="Magento_Backend::couponcode_elements" parent="Lof_All::lof_all"/>
+		<add id="Lof_CouponCode::rule" title="Manage Rules" module="Lof_CouponCode" sortOrder="10" action="couponcode/rule/index" resource="Lof_CouponCode::rule" parent="Lof_CouponCode::couponcode"/>
+		<add id="Lof_CouponCode::coupon" title="Manage Coupon Code" module="Lof_CouponCode" sortOrder="20" action="couponcode/coupon/index" resource="Lof_CouponCode::coupon" parent="Lof_CouponCode::couponcode"/>
+		<add id="Lof_CouponCode::log" title="Manage Coupon Logs" module="Lof_CouponCode" sortOrder="25" action="couponcode/log/index" resource="Lof_CouponCode::log" parent="Lof_CouponCode::couponcode"/>
+		<add id="Lof_CouponCode::coupon_import" title="Import Coupon Codes" module="Lof_CouponCode" sortOrder="30" action="couponcode/import/index" resource="Lof_CouponCode::coupon_import" parent="Lof_CouponCode::couponcode"/>
+		<add id="Lof_CouponCode::generate" title="Generate Coupon Code" module="Lof_CouponCode" sortOrder="40" action="couponcode/generate/index" resource="Lof_CouponCode::generate" parent="Lof_CouponCode::couponcode"/>
+		<add id="Lof_CouponCode::salesreport" title="Report" module="Lof_CouponCode" sortOrder="50" action="couponcode/report_sales/coupon" resource="Lof_CouponCode::salesreport" parent="Lof_CouponCode::couponcode"/>
+		<add id="Lof_CouponCode::configuration" title="Configuration" module="Lof_CouponCode" sortOrder="60" parent="Lof_CouponCode::couponcode" action="adminhtml/system_config/edit/section/lofcouponcode" resource="Lof_CouponCode::config_couponcode"/> 
+
+	</menu>
+</config>

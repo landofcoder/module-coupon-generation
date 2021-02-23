@@ -1,0 +1,49 @@
+<?php
+if($coupon_log) {
+	$data = $coupon_log->getOrigData();
+	$discount_amount = $block->DiscountAmountFormat($data['rule_id'],$coupon_log->getDiscountAmount());
+?>
+<div class="block trackcoupon-info-block">
+	<div class="block-title">
+		<h2><?php echo __("Sales order and coupon code detail"); ?></h2>
+	</div>
+	<div class="block-content">
+		<table class="table table-striped table-hover track-info">
+			<tr class="data-coupon">
+				<td class="row-label"><?php echo __("Coupon Code");?></td>
+				<td class="row-value" style="font-weight: bold;"><?php echo $coupon_log->getCouponCode();?></td>
+			</tr>
+			<tr class="data-name">
+				<td class="row-label"><?php echo __("Name");?></td>
+				<td class="row-value"><?php echo $coupon_log->getFullName();?></td>
+			</tr>
+			<tr class="data-email">
+				<td class="row-label"><?php echo __("Email Address");?></td>
+				<td class="row-value"><?php echo $coupon_log->getEmailAddress();?></td>
+			</tr>
+			<tr class="data-amount">
+				<td class="row-label"><?php echo __("Discount Amount");?></td>
+				<td class="row-value"><?php echo "-".$discount_amount;?></td>
+			</tr>
+			<?php if($order_info) { ?>
+			<tr class="data-order-status">
+				<td class="row-label"><?php echo __("Order Status");?></td>
+				<td class="row-value"><?php echo $order_info->getStatusLabel();?></td>
+			</tr>
+			<tr class="data-order-total">
+				<td class="row-label"><?php echo __("Order Total");?></td>
+				<td class="row-value"><?php echo $order_info->getSubtotal().$currencyCode;?></td>
+			</tr>
+			<tr class="data-order-created-date">
+				<td class="row-label"><?php echo __("Created Date");?></td>
+				<td class="row-value"><?php echo $block->formatDate($order_info->getCreatedAt(), \IntlDateFormatter::LONG);?></td>
+			</tr>
+			<?php } ?>
+		</table>
+	</div>
+</div>
+<?php
+} else {
+	echo __("The tracking code do not exists. We can not found result!");
+}
+?>

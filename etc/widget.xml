@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Landofcoder
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the landofcoder.com license that is
+ * available through the world-wide-web at this URL:
+ * http://landofcoder.com/license
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Landofcoder
+ * @package    Lof_Autosearch
+ * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
+ * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+	<widget id="lof_coupon_widget" class="Lof\CouponCode\Block\Widget\Coupon">
+		<label translate="true">Lof Redeem Coupon Form</label>
+		<description>Custom Coupon Code Generator</description>
+		<parameters>
+			<parameter name="title" xsi:type="text" visible="true">
+				<label translate="true">Widget Title</label>
+				<description translate="true">This title will be showed as header of widget block. Empty to disable</description>
+			</parameter>
+			<parameter name="addition_cls" xsi:type="text"  visible="true">
+				<label translate="true">Addition Class</label>
+				<description translate="true">This class is used to make owner style for the widget.</description>
+			</parameter>
+			<parameter name="heading_class" xsi:type="text"  visible="true">
+				<label translate="true">Widget Title Class</label>
+				<description translate="true">Input css class for widget heading title.</description>
+			</parameter>
+			<parameter name="pretext_class" xsi:type="text"  visible="true">
+				<label translate="true">Pretext Class</label>
+				<description translate="true">Input css class for widget pretext.</description>
+			</parameter>
+			<parameter name="cms_id" xsi:type="select" visible="true" source_model="Lof\CouponCode\Model\Config\Source\Staticblock">
+				<label translate="true">Select CMS Static block as Pretext</label>
+			</parameter>
+			<parameter name="rule_id" xsi:type="select" visible="true" source_model="Lof\CouponCode\Model\Config\Source\ListRule">
+				<label translate="true">Discount Rule</label>
+				<description translate="true">Select a rule to generate coupon code.</description>
+			</parameter>
+			<parameter name="show_only_customer" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno">
+				<label translate="true">Only Customer Can View</label>
+			</parameter>
+			<parameter name="show_email" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno">
+				<label translate="true">Show Email Field</label>
+			</parameter>
+			<parameter name="show_name" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno">
+				<label translate="true">Show Name Field</label>
+			</parameter>
+			<parameter name="show_qrcode" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno">
+				<label translate="true">Show Qrcode</label>
+			</parameter>
+			<parameter name="show_barcode" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno">
+				<label translate="true">Show Barcode 39</label>
+			</parameter>
+			<parameter name="show_button" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno">
+				<label translate="true">Show Action Button</label>
+			</parameter>
+			<parameter name="width" xsi:type="text"  visible="true">
+				<label translate="true">Qrcode Width</label>
+				<description translate="true">Input qrcode width. Default: 200</description>
+				<depends><parameter name="show_qrcode" value="1" /></depends>
+				<value>200</value>
+			</parameter>
+			<parameter name="height" xsi:type="text"  visible="true">
+				<label translate="true">Qrcode Height</label>
+				<description translate="true">Input qrcode height. Default: 200</description>
+				<depends><parameter name="show_qrcode" value="1" /></depends>
+				<value>200</value>
+			</parameter>
+			<parameter name="barcode_width" xsi:type="text"  visible="true">
+				<label translate="true">Barcode Image Width</label>
+				<description translate="true">Input barcode width. Default: 249</description>
+				<depends><parameter name="show_barcode" value="1" /></depends>
+				<value>249</value>
+			</parameter>
+			<parameter name="barcode_height" xsi:type="text"  visible="true">
+				<label translate="true">Barcode Image Height</label>
+				<description translate="true">Input barcode height. Default: 80</description>
+				<depends><parameter name="show_qrcode" value="1" /></depends>
+				<value>80</value>
+			</parameter>
+		</parameters>
+	</widget>
+</widgets>

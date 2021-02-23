@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="followup_email_before_set_vars">
+        <observer name="add_custom_variable_to_email" 
+            instance="Lof\CouponCode\Observer\ObserverforAddCustomVariable" />
+    </event>
+    <event name="salesrule_validator_process">
+	   <observer name="lof_add_coupon_from_cart" instance="Lof\CouponCode\Observer\ObserverforCheckCoupon"/>
+	</event>
+	<event name="controller_action_predispatch_checkout_cart_couponPost">
+	   <observer name="lof_add_coupon_pre" instance="Lof\CouponCode\Observer\ObserverforCheckCoupon"/>
+	</event>
+</config>

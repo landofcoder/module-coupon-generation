@@ -1,0 +1,31 @@
+<?php  $_gridrecords = $block->getCollection();?>
+<?php if ($_gridrecords && count($_gridrecords)): ?>
+    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php echo __('#') ?></th>
+                    <th scope="col" class="col title"><?php echo __('Code') ?></th>
+                    <th scope="col" class="col date"><?php echo __('Email') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $no = 1;
+                    foreach ($_gridrecords as $_gridrecord): ?>
+                    <tr>
+                        <td class="col id"><?php echo $no ?></td>
+                        <td class="col shipping"><?php echo $_gridrecord->getCode() ?></td>
+                        <td class="col status"><?php echo $_gridrecord->getEmail() ?></td>
+                    </tr>
+                <?php $no++; endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml();?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('grid records not available.'); ?></span></div>
+<?php endif ?>

@@ -1,0 +1,235 @@
+<?php
+$widgetid = time().rand();
+$redeem_link_org = $this->getRedeemLink();
+$customer_info = $this->getCustomerInfo();
+$barcode_width = isset($barcode_width)?(int)$barcode_width:249;
+$barcode_height = isset($barcode_height)?(int)$barcode_height:80;
+if($show_barcode) {
+	$barcode_helper           = $this->helper("Lof\CouponCode\Helper\Barcode39");
+}
+$redeem_link = $redeem_link_org;
+if($customer_info){
+	$redeem_link .="?rule_id=".$rule_id."&email=".$customer_info['email']."&name=".$customer_info['fullname'];
+	$redeem_link = str_replace(array(" ",":","=","&","?"), array("+","%3A","%3D","%26","%3F"), $redeem_link); 
+	$qrlink = "https://chart.googleapis.com/chart?chs=".(int)$width."x".(int)$height."&cht=qr&chl=".$redeem_link."&choe=UTF-8";
+} else{
+	$qrlink = "https://chart.googleapis.com/chart?chs=".(int)$width."x".(int)$height."&cht=qr&chl=redeem+coupon&choe=UTF-8";
+}
+
+?>
+<div class="block widget lof-couponcode couponcode-widget <?php echo $addition_cls; ?>">
+	<?php if($title){ ?>
+	<div class="block-title <?php echo $heading_class; ?>">
+		<strong><?php echo $title ?></strong>
+	</div>
+	<?php } ?>
+	<?php if($cms_block_html){ ?>
+	<div class="pretext <?php echo $pretext_class; ?>">
+		<?php echo $cms_block_html; ?>
+	</div>
+	<?php } ?>
+	<div class="block-content">
+		<div class="redeem-form-container">
+			<form id="redeemForm<?php echo $widgetid;?>" class="form redeem-form" action="<?php echo $this->getRedeemLink(); ?>">
+				
+				<?php if($show_barcode){ ?>
+				<fieldset class="fieldset" style="text-align: center; max-width: <?php echo (int)$barcode_width; ?>px;">
+					<div class="redeem-barcode39" style="display: none;" id="redeemBarcode39<?php echo $widgetid;?>">
+						<img style="float: left" class="barcode-image" src="" width="<?php echo (int)$barcode_width; ?>" height="<?php echo (int)$barcode_height; ?>" alt=""/>
+					</div>
+				</fieldset>
+				<?php } ?>
+				
+				<fieldset class="fieldset" style="text-align: center; max-width: <?php echo (int)$width; ?>px;">
+					<div class="redeem-barcode" style="display: none;" id="redeemBarcode<?php echo $widgetid;?>">
+						<?php if($show_qrcode){ ?>
+						<img style="float: left;<?php if($get_current_order_info){ ?>display:none; <?php } ?>" class="qrcode-image" src="<?php echo $qrlink; ?>" width="<?php echo (int)$width; ?>" height="<?php echo (int)$height; ?>" alt=""/>
+						<?php } ?>
+						<div id="showCoupon<?php echo $widgetid; ?>" class="show-coupon-code"></div>
+						<div id="save_message<?php echo $widgetid;?>"></div>
+					</div>
+				</fieldset>
+				
+				<?php
+				if($customer_info) {
+				?>
+				<input type="hidden" name="email" class="email-field" value="<?php echo $customer_info['email']; ?>">
+				<?php } else { ?>
+				<fieldset class="fieldset">
+					<?php if($show_email) { ?>
+					<div class="field email">
+						<label class="label" for="email"><span><?php echo __("Email"); ?></span></label>
+						<div class="control">
+							<input type="email" name="email" class="input-text email-field" data-validate="{required:true, 'validate-email':true}" aria-required="true">
+						</div>
+					</div>
+					<?php } ?>
+					<?php if($show_name) { ?>
+					<div class="field name">
+						<label class="label" for="name"><span><?php echo __("Name"); ?></span></label>
+						<div class="control">
+							<input type="text" class="input-text customer_name-field" name="customer_name" value="">
+						</div>
+					</div>
+					<?php } ?>
+			    </fieldset>
+				<?php }
+				?>
+				<?php if($show_button){ ?>
+				<div class="actions-toolbar">
+			        <div class="primary">
+			            <input type="hidden" name="hideit" id="hideit" value="">
+			            <button type="button" id="submitRedeem<?php echo $widgetid; ?>" title="<?php echo __("Get Coupon Code");?>" class="action submit primary">
+			                <span><?php echo __("Get Coupon Code");?></span>
+			            </button>
+			        </div>
+			        <div class="ajax-loading" style="display: none"><?php echo __("Getting...");?></div>
+			    </div>
+			    <?php } ?>
+				<input type="hidden" name="rule_id" class="ruleid-field" value="<?php echo $rule_id; ?>">
+				<?php if($get_current_order_info){ ?>
+				<input type="hidden" name="orderid" class="orderid-field" value="<?php echo $block->escapeHtml($block->getOrderId()); ?>">
+				<input type="hidden" name="redeem_link" class="redeem_link-field" value="<?php echo $redeem_link; ?>">
+				<?php } ?>
+				<?php if($customer_info !== null){ ?>
+				<input type="hidden" name="customer_name" class="customer_name-field" value="<?php echo isset($customer_info['fullname']) ? $customer_info['fullname'] : ''; ?>">
+				<input type="hidden" name="customer_id" class="customer_id-field" value="<?php echo isset($customer_info['customer_id'])? $customer_info['customer_id'] : ''; ?>"/>
+				<?php } ?>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+		require(['jquery','mage/mage'], function($){
+			function buildRedeemLink(){
+				var dataForm = $('#redeemForm<?php echo $widgetid;?>');
+                var ignore = 'null';
+                dataForm.mage('validation', {
+                    ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+                }).find('input:text').attr('autocomplete', 'off');
+
+				var redeem_link = redeem_link_org = "<?php echo $redeem_link_org; ?>";
+				var rule_id = $("#redeemForm<?php echo $widgetid;?> .ruleid-field").val();
+				var customer_id = $("#redeemForm<?php echo $widgetid;?> .customer_id-field").val();
+				var orderid = 0;
+				var email = $("#redeemForm<?php echo $widgetid;?> .email-field").val();
+				var name = $("#redeemForm<?php echo $widgetid;?> .customer_name-field").val();
+				if($("#redeemForm<?php echo $widgetid;?> .orderid-field").length > 0 ){
+					orderid = $("#redeemForm<?php echo $widgetid;?> .orderid-field").val();
+				}
+				redeem_link += "?";
+				if(rule_id) {
+					redeem_link +='rule_id='+rule_id;
+				}
+				if(email) {
+					redeem_link +='&email='+email;
+				}
+				if(rule_id) {
+					redeem_link +='&name='+name;
+				}
+				if(orderid) {
+					redeem_link +='&orderid='+orderid;
+				}
+				if(customer_id) {
+					redeem_link +='&customer_id='+customer_id;
+				}
+
+
+				return redeem_link;
+			}
+			function buildTrackLink(coupon_code, email_address){
+				var track_link = track_link_org = "<?php echo $this->getTrackLink(); ?>";
+				track_link += "?";
+				if(coupon_code) {
+					track_link +='coupon_code='+coupon_code;
+				}
+				if(email_address) {
+					track_link +='&email='+email_address;
+				}
+				return track_link;
+			}
+			function getTrackingQrlink(coupon_code, email_address){
+				var track_link = buildTrackLink(coupon_code, email_address);
+				track_link = track_link.replace(" ","+");
+				track_link = track_link.replace(":","%3A");
+				track_link = track_link.replace("=","%3D");
+				track_link = track_link.replace("&","%26");
+				track_link = track_link.replace("?","%3F");
+
+				return "https://chart.googleapis.com/chart?chs=<?php echo (int)$width;?>x<?php echo (int)$height; ?>&cht=qr&chl="+track_link+"&choe=UTF-8";
+			}
+			function getQrlink(){
+				var redeem_link = buildRedeemLink();
+				redeem_link = redeem_link.replace(" ","+");
+				redeem_link = redeem_link.replace(":","%3A");
+				redeem_link = redeem_link.replace("=","%3D");
+				redeem_link = redeem_link.replace("&","%26");
+				redeem_link = redeem_link.replace("?","%3F");
+
+				return "https://chart.googleapis.com/chart?chs=<?php echo (int)$width;?>x<?php echo (int)$height; ?>&cht=qr&chl="+redeem_link+"&choe=UTF-8";
+			}
+			$(document).on('click', '#submitRedeem<?php echo $widgetid; ?>', function(){
+				var redeem_link = buildRedeemLink();
+				redeem_link +="&isAjax=1";
+				<?php if($show_barcode) { ?>
+				redeem_link += '&barcode=1';
+				<?php } ?>
+				if ($('#redeemForm<?php echo $widgetid;?>').valid()) {
+					$('#redeemForm<?php echo $widgetid;?> .ajax-loading').show();
+                    $.ajax({
+                        url: redeem_link,
+                        method: "GET",
+                        success: function(result) {
+                        	var coupon_code = "";
+                        	$('#redeemForm<?php echo $widgetid;?> .ajax-loading').hide();
+                        	if(result.status == "success"){
+                        		coupon_code = result.coupon;
+                        		email = result.email;
+                        		<?php if($show_qrcode){ ?>
+	                        		<?php if($get_current_order_info){ ?>
+	                        			var track_qr_link = getTrackingQrlink(coupon_code, email);
+	                        			$("#redeemBarcode<?php echo $widgetid;?> img.qrcode-image").attr("src", track_qr_link);
+	                        			$("#redeemBarcode<?php echo $widgetid;?> img.qrcode-image").show();
+	                        		<?php } ?>
+                        		<?php } ?>
+                        		$('#redeemBarcode<?php echo $widgetid?>').show();
+                        		$('#submitRedeem<?php echo $widgetid; ?>').hide();
+                        		$("#showCoupon<?php echo $widgetid; ?>").html('<strong>'+result.coupon+'</strong>');
+                        		$("#save_message<?php echo $widgetid;?>").html('<p><?php echo __("Please save this qrcode or coupon code to get discount amount at checkout or use it to track log info by scan qrcode"); ?></p>');
+                            	$("#showCoupon<?php echo $widgetid; ?>").show();
+
+                            	<?php if($show_barcode) { ?>
+                            		barcode = result.barcode;
+                            		<?php if($get_current_order_info){ ?>
+                        			$("#redeemBarcode39<?php echo $widgetid;?> img.barcode-image").attr("src", barcode);
+                        			$("#redeemBarcode39<?php echo $widgetid;?> img.barcode-image").show();
+                        			$('#redeemBarcode39<?php echo $widgetid?>').show();
+                        			<?php } ?>
+                            	<?php } ?>
+                            	console.log("\n Success: "+result.message);
+                        	} else {
+                        		console.log("\n Error: "+result.message);
+                            	$("#showCoupon<?php echo $widgetid; ?>").hide();
+                        	}
+                        }
+                    });
+                }
+                event.preventDefault();
+				return false;
+			});
+			<?php if($show_qrcode){ ?>
+			$(document).on('keyup', '#redeemForm<?php echo $widgetid; ?> .email-field', function(){
+				$('#redeemBarcode<?php echo $widgetid?>').show();
+				var qrlink = getQrlink();
+				$("#redeemBarcode<?php echo $widgetid;?> img").attr("src", qrlink);
+				return false;
+			});
+			$(document).on('keyup', '#redeemForm<?php echo $widgetid; ?> .name-field', function(){
+				$('#redeemBarcode<?php echo $widgetid?>').show();
+				var qrlink = getQrlink();
+				$("#redeemBarcode<?php echo $widgetid;?> img").attr("src", qrlink);
+				return false;
+			});
+			<?php } ?>
+		});
+	</script>
