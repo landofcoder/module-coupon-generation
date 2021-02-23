@@ -87,7 +87,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\SalesRule\Helper\Coupon $salesRuleCoupon,
         \Magento\Framework\App\ResourceConnection $resource,
         \Lof\CouponCode\Model\RuleFactory $ruleFactory
-    ) {
+        ) {
         parent::__construct($context);
         $this->_localeDate     = $localeDate;
         $this->_scopeConfig    = $context->getScopeConfig();
@@ -103,13 +103,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->resource                     = $resource;
     }
 
-    public function sendMail($emailFrom, $emailTo, $emailidentifier, $templateVar)
-    {
+    public function sendMail($emailFrom,$emailTo,$emailidentifier,$templateVar){
         $this->inlineTranslation->suspend();
         $transport = $this->_transportBuilder->setTemplateIdentifier($emailidentifier)
             ->setTemplateOptions(
                 [
-                    'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
                     'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             )
@@ -127,10 +126,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $store = $this->_storeManager->getStore($store);
         $websiteId = $store->getWebsiteId();
         $result = $this->scopeConfig->getValue(
-            'lofcouponcode/' . $key,
+            'lofcouponcode/'.$key,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        );
+            $store);
         return $result;
     }
 
@@ -139,18 +137,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $modelRule = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
         $collection = $modelRule->load($ruleId);
         return $collection;
+
     }
     public function filter($str)
     {
         $html = $this->_filterProvider->getPageFilter()->filter($str);
         return $html;
     }
-    public function getCouponRuleData($ruleId)
-    {
-        if (!isset($this->_coupon_rule_model[$ruleId])) {
+    public function getCouponRuleData($ruleId){
+        if(!isset($this->_coupon_rule_model[$ruleId])) {
 //            $model = $this->_objectManager->create('Lof\CouponCode\Model\Rule');
             $model = $this->ruleFactory->create();
-            if (is_numeric($ruleId)) {
+            if(is_numeric($ruleId)) {
                 $collection = $model->load($ruleId);
             } else {
                 $collection = $model->loadByAlias($ruleId);
@@ -159,11 +157,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return $this->_coupon_rule_model[$ruleId];
     }
-    /**
-    * Generate coupon code
-    *
-    * @return string
-    */
+     /**
+     * Generate coupon code
+     *
+     * @return string
+     */
     public function generateCode($ruleId)
     {
         $format = $this->getCouponRuleData($ruleId)->getCouponsFormat();
@@ -189,36 +187,35 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $prefix . $code . $suffix;
     }
 
-    public function getAllRule()
-    {
+    public function getAllRule(){
         $salesruleTable = $this->resource->getTableName('salesrule');
         $lofRuleTable = $this->resource->getTableName('lof_couponcode_rule');
 
         $collection = $this->collectionFactory->create();
         $collection->getSelect()->join(
-            ['lof_couponcode_rule' => $lofRuleTable],
-            'main_table.rule_id = lof_couponcode_rule.rule_id',
-            ['coupon_rule_id']
-        );
-        $param = [];
-        foreach ($collection as $rule) {
+                ['lof_couponcode_rule' => $lofRuleTable],
+                'main_table.rule_id = lof_couponcode_rule.rule_id',
+                ['coupon_rule_id']
+                );
+        $param = array();
+        foreach ($collection as $rule ) {
             $param[$rule['coupon_rule_id']] = $rule['name'];
         }
         return $param;
     }
 
-    public function getBaseUrl()
-    {
+    public function getBaseUrl(){
         return $this->_storeManager->getStore()->getBaseUrl();
     }
 
-    public function getTrackLink()
-    {
+    public function getTrackLink(){
         $base_url = $this->getBaseUrl();
         $route = $this->getConfig("general_settings/track_route");
-        if (!$route) {
+        if(!$route){
             $route = "couponcode/track/trackcode";
         }
-        return $base_url . $route;
+        return $base_url.$route;
     }
+
+
 }

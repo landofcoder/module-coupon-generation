@@ -2,18 +2,18 @@
 <!--
 /**
  * LandofCoder
- *
+ * 
  * NOTICE OF LICENSE
- *
+ * 
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- *
+ * 
  * DISCLAIMER
- *
+ * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- *
+ * 
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -21,6 +21,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
-    <template id="sent_mail_with_customer" label="Send email with customer" file="mail_customer.html" type="html" module="Lof_CouponCode" area="frontend"/>
-    <template id="sent_mail_with_visitor" label="Send email with visitor" file="mail_visitor.html" type="html" module="Lof_CouponCode" area="frontend"/>
+    <template id="sent_mail_with_customer" label="Send email with customer" file="mail_customer.html" type="html" module="Lof_CouponCode" area="adminhtml"/>
+    <template id="sent_mail_with_visitor" label="Send email with visitor" file="mail_visitor.html" type="html" module="Lof_CouponCode" area="adminhtml"/>
 </config>

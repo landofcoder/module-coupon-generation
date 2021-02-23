@@ -20,20 +20,20 @@
  */
 namespace Lof\CouponCode\Controller\Adminhtml\Generate;
 
-use Lof\CouponCode\Helper\Data;
 use Magento\Backend\App\Action\Context;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Lof\CouponCode\Helper\Data;
 
 /**
  * Class MassAssignGroup
  */
 class MassGenerate extends AbstractMassAction
 {
-    const EMAILIDENTIFIER = 'sent_mail_with_customer';
+    CONST EMAILIDENTIFIER = 'sent_mail_with_customer';
     /**
      * @var CustomerRepositoryInterface
      */
@@ -41,9 +41,9 @@ class MassGenerate extends AbstractMassAction
 
     protected $_helper;
 
-    /**
-      * @var \Magento\SalesRule\Model\CouponFactory
-      */
+   /**
+     * @var \Magento\SalesRule\Model\CouponFactory
+     */
     protected $couponFactory;
 
     /**
@@ -55,6 +55,8 @@ class MassGenerate extends AbstractMassAction
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
+
+
 
     /**
      * @param Context $context
@@ -78,6 +80,7 @@ class MassGenerate extends AbstractMassAction
         $this->couponFactory = $couponFactory;
         $this->dateTime = $dateTime;
         $this->date = $date;
+
     }
 
     /**
@@ -93,12 +96,12 @@ class MassGenerate extends AbstractMassAction
         $couponRuleId = $this->getRequest()->getParam('rule');
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        if ($couponRuleId) {
-            try {
+        if($couponRuleId) {
+            try{
                 $coupon = $this->couponFactory->create();
                 $couponRuleData = $this->_helper->getCouponRuleData($couponRuleId);
                 $ruleId = (int)$couponRuleData->getRuleId();
-                if ($ruleId) {
+                if($ruleId) {
                     $limit_time_generated_coupon = (int)$couponRuleData->getLimitGenerated();
 
                     $couponsGeneratedOld =$couponRuleData->getCouponsGenerated();
@@ -107,7 +110,7 @@ class MassGenerate extends AbstractMassAction
                     if ($expirationDate && !($expirationDate instanceof \DateTime)) {
                         $expirationDate = \DateTime::createFromFormat('Y-m-d', $expirationDate);
                     }
-                    if ($expirationDate instanceof \DateTime) {
+                    if($expirationDate instanceof \DateTime) {
                         $expirationDate = $expirationDate->format('Y-m-d H:i:s');
                     }
                     $_lofCoupon = $this->_objectManager->create('Lof\CouponCode\Model\Coupon');
@@ -115,23 +118,23 @@ class MassGenerate extends AbstractMassAction
                     $emailidentifier = self::EMAILIDENTIFIER;
                     $queue_mail_array = [];
                     foreach ($collection->getAllIds() as $customerId) {
-                        $coupon_code = $this->_helper->generateCode($couponRuleId);
-                        // echo $coupon_code;
+                            $coupon_code = $this->_helper->generateCode($couponRuleId);
+                            // echo $coupon_code;
 
-                        $customer = $this->customerRepository->getById($customerId);
-                        $customerEmail = $customer->getEmail();
+                            $customer = $this->customerRepository->getById($customerId);
+                            $customerEmail = $customer->getEmail();
 
-                        //number coupons was generated for same email address
-                        $coupon_collection = $this->_objectManager->create('Lof\CouponCode\Model\Coupon')->getCollection();
-                        $number_generated_coupon = (int)$coupon_collection->getTotalByEmail($customerEmail, $ruleId);
-                        if ($limit_time_generated_coupon > 0 && $number_generated_coupon >= $limit_time_generated_coupon) {
-                            continue;
-                        }
-                        //-------------------
-                        $customerName =$customer->getFirstname() . " " . $customer->getLastname();
-                        //-------------------
+                            //number coupons was generated for same email address
+                            $coupon_collection = $this->_objectManager->create('Lof\CouponCode\Model\Coupon')->getCollection();
+                            $number_generated_coupon = (int)$coupon_collection->getTotalByEmail($customerEmail, $ruleId);
+                            if($limit_time_generated_coupon > 0 && $number_generated_coupon >= $limit_time_generated_coupon) {
+                                continue;
+                            }
+                            //-------------------
+                            $customerName =$customer->getFirstname() . " " . $customer->getLastname();
+                            //-------------------
 
-                        $coupon->setId(null)
+                            $coupon->setId(null)
                                 ->setRuleId($ruleId)
                                 ->setExpriationDate($expirationDate)
                                 ->setCreatedAt($nowTimestamp)
@@ -140,22 +143,22 @@ class MassGenerate extends AbstractMassAction
                                 ->setCode($coupon_code)
                                 ->save();
 
-                        if ($coupon->getId()) {
-                            $_lofCoupon->setId(null)
+                            if($coupon->getId()) {
+                                $_lofCoupon->setId(null)
                                     ->setRuleId($ruleId)
                                     ->setCouponId($coupon->getId())
                                     ->setCode($coupon_code)
                                     ->setEmail($customerEmail)
                                     ->setCustomerId((int)$customerId)
                                     ->save();
-                            $simple_action = $couponRuleData->getSimpleAction();
-                            $discount_amount_formatted = $couponRuleData->getDiscountAmount();
-                            if ($simple_action == 'by_percent') {
-                                $discount_amount_formatted .='%';
-                            } elseif ($simple_action == 'fixed') {
-                                $discount_amount_formatted ='$' . $discount_amount_formatted;
-                            }
-                            $templateVar = [
+                                $simple_action = $couponRuleData->getSimpleAction();
+                                $discount_amount_formatted = $couponRuleData->getDiscountAmount();
+                                if($simple_action == 'by_percent') {
+                                    $discount_amount_formatted .='%';
+                                }elseif($simple_action == 'fixed'){
+                                    $discount_amount_formatted ='$'.$discount_amount_formatted;
+                                }
+                                $templateVar = array(
                                     'customer_name' => $customerName,
                                     'coupon_code' => $coupon_code,
                                     'rule_title' => $couponRuleData->getName(),
@@ -165,11 +168,11 @@ class MassGenerate extends AbstractMassAction
                                     'discount_amount' => $couponRuleData->getDiscountAmount(),
                                     'discount_amount_formatted' => $discount_amount_formatted,
                                     'link_website' => $this->_helper->getBaseUrl()
-                                ];
+                                );
 
-                            $queue_mail_array[] = ['email_from' => $emailFrom, 'email_to' =>$customerEmail, 'identifier' => $emailidentifier, 'template_vars' =>$templateVar];
-                            $couponGenerate++;
-                        }
+                                $queue_mail_array[] = ['email_from' => $emailFrom, 'email_to' =>$customerEmail, 'identifier' => $emailidentifier, 'template_vars' =>$templateVar];
+                                $couponGenerate++;
+                            }
                     }
                     if ($couponGenerate) {
                         $couponGenerateNew = $couponGenerate + $couponsGeneratedOld;
@@ -177,36 +180,39 @@ class MassGenerate extends AbstractMassAction
                         $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $couponGenerate));
                     }
                     $allow_send_email = $this->_helper->getConfig('general_settings/send_email_coupon');
-                    if ($allow_send_email && $queue_mail_array) {
-                        foreach ($queue_mail_array as $email_item) {
-                            $this->_helper->sendMail($email_item['email_from'], $email_item['email_to'], $email_item['identifier'], $email_item['template_vars']);
+                    if($allow_send_email && $queue_mail_array) {
+                        foreach($queue_mail_array as $email_item) {
+                            $this->_helper->sendMail($email_item['email_from'],$email_item['email_to'],$email_item['identifier'],$email_item['template_vars']);
                         }
                     }
                 } else {
                     $this->messageManager->addError(
-                        __('Not found coupon rule to generate code. Please review the error log.')
-                    );
+                         __('Not found coupon rule to generate code. Please review the error log.')
+                         );
                 }
+
             } catch (\Exception $e) {
                 $this->messageManager->addError(
-                    __('Something went wrong while generate coupon code. Please review the error log.')
-                );
+                 __('Something went wrong while generate coupon code. Please review the error log.')
+                 );
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $resultRedirect->setPath('*/*/index');
             }
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect->setPath('*/*/index');
+       $resultRedirect->setPath('*/*/index');
 
         return $resultRedirect;
     }
-    /**
-    * Check the permission to run it
-    *
-    * @return boolean
-    */
+     /**
+     * Check the permission to run it
+     *
+     * @return boolean
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Lof_CouponCode::generate');
     }
+
+
 }
