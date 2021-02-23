@@ -73,25 +73,25 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if($attribute = $object->getData('customer_group_ids')){
             $table = $this->getTable('salesrule_customer_group');
-            $where = ['rule_id = ?' => (int)$object->getRuleId()];
+            $where = ['row_id = ?' => (int)$object->getRuleId()];
             $this->getConnection()->delete($table, $where); 
             $data = []; 
             foreach ($attribute as $k => $_attribute) {
                 $data[] = [
                 'customer_group_id' => $_attribute,
-                'rule_id' => (int)$object->getRuleId()
+                'row_id' => (int)$object->getRuleId()
                 ];
             }
             $this->getConnection()->insertMultiple($table, $data);
         }
         if($stores = $object->getData('website_ids')){
             $table = $this->getTable('salesrule_website');
-            $where = ['rule_id = ?' => (int)$object->getRuleId()];
+            $where = ['row_id = ?' => (int)$object->getRuleId()];
             $this->getConnection()->delete($table, $where);
             if ($stores) {
                 $data = [];
                 foreach ($stores as $storeId) {
-                    $data[] = ['rule_id' => (int)$object->getRuleId(), 'website_id' => (int)$storeId];
+                    $data[] = ['row_id' => (int)$object->getRuleId(), 'website_id' => (int)$storeId];
                 }
                 try{
                     $this->getConnection()->insertMultiple($table, $data);
@@ -165,7 +165,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         {
             $connection = $this->getConnection();
             $select = $connection->select()->from($this->getTable('salesrule_customer_group'),'customer_group_id')->where(
-                'rule_id = :rule_id'
+                'row_id = :rule_id'
                 );
             $binds = [':rule_id' => (int)$id];
             return $connection->fetchCol($select, $binds);
@@ -173,7 +173,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         public function lookupSalesRule($id)
         {
             $connection = $this->getConnection();
-            $select = $connection->select()->from(['lofrule' => $this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id')->where(
+            $select = $connection->select()->from(['lofrule' => $this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.row_id')->where(
                 'coupon_rule_id = :coupon_rule_id'
                 )->limit(1);
             $binds = [':coupon_rule_id' => (int)$id];
@@ -183,7 +183,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         public function lookupRuleByid($id)
         {
             $connection = $this->getConnection();
-            $select = $connection->select()->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id')->where(
+            $select = $connection->select()->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.row_id')->where(
                 'lofrule.rule_id = :rule_id'
                 )->limit(1);
             $binds = [':rule_id' => (int)$id];
@@ -193,7 +193,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         public function getRuleData()
         {
             $connection = $this->getConnection();
-            $select = $connection->select()->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id');
+            $select = $connection->select()->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.row_id');
             return $connection->fetchAll($select);
         }
     }

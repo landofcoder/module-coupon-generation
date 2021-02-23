@@ -22,7 +22,7 @@ class Builder extends \Magento\Rule\Model\Condition\Sql\Builder
     public function attachConditionToCollection(
         \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection,
         Combine $combine
-    ):void {
+    ): void {
         
         $this->_connection = $collection->getResource()->getConnection();
         $this->_joinTablesToCollection($collection, $combine);
@@ -31,7 +31,7 @@ class Builder extends \Magento\Rule\Model\Condition\Sql\Builder
         if (!empty($whereExpression)) {
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
-        }
+        } 
     }
 
 }
