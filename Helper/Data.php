@@ -221,4 +221,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return $base_url . $route;
     }
+
+    /**
+     * Is enabled module on frontend
+     * @return int|bool
+     */
+    public function isEnabled()
+    {
+        return (int)$this->getConfig("general_settings/show");
+    }
 }

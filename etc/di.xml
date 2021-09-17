@@ -25,9 +25,6 @@
     <preference for="Lof\CouponCode\Api\CouponRepositoryInterface" type="Lof\CouponCode\Model\CouponRepository"/>
     <preference for="Lof\CouponCode\Api\Data\CouponInterface" type="Lof\CouponCode\Model\Coupon"/>
     <preference for="Lof\CouponCode\Api\Data\CouponSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-
-    <preference for="Magento\Quote\Api\CouponManagementInterface" type="Lof\CouponCode\Model\CouponManagement" />
-
     <preference for="Magento\Newsletter\Model\Subscriber" type="Lof\CouponCode\Model\Rewrite\Newsletter\Subscriber"/>
     <preference for="Lof\CouponCode\Api\LogManagementInterface" type="Lof\CouponCode\Model\LogManagement" />
     <preference for="Lof\CouponCode\Api\CouponManagementInterface" type="Lof\CouponCode\Model\CouponManagement" />

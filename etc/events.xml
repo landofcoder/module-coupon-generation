@@ -4,10 +4,4 @@
         <observer name="add_custom_variable_to_email" 
             instance="Lof\CouponCode\Observer\ObserverforAddCustomVariable" />
     </event>
-    <event name="salesrule_validator_process">
-	   <observer name="lof_add_coupon_from_cart" instance="Lof\CouponCode\Observer\ObserverforCheckCoupon"/>
-	</event>
-	<event name="controller_action_predispatch_checkout_cart_couponPost">
-	   <observer name="lof_add_coupon_pre" instance="Lof\CouponCode\Observer\ObserverforCheckCoupon"/>
-	</event>
 </config>
