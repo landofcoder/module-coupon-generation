@@ -84,7 +84,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
         $renderer = $this->_rendererFieldset->setTemplate(
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
-            $this->getUrl('sales_rule/promo_quote/newConditionHtml/form/rule_conditions_fieldset')
+            $this->getUrl('sales_rule/promo_quote/newConditionHtml/form/rule_conditions_fieldset/form_namespace/edit_form')
         );
       $fieldset = $form->addFieldset(
             'conditions_fieldset',

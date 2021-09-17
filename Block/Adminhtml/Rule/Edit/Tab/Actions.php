@@ -133,7 +133,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
        $renderer = $this->_rendererFieldset->setTemplate(
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
-            $this->getUrl('sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset')
+            $this->getUrl('sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset/form_namespace/edit_form')
         );
 
         $fieldset = $form->addFieldset(
