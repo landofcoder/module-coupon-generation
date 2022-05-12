@@ -1,18 +1,18 @@
 <?php
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -31,10 +31,10 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_columnGroupBy = '';
     protected $_defaultSort = 'period';
     protected $_defaultDir = 'ASC';
-    protected $_resource_grid_collection = null; 
-    protected $_reportsData = null; 
-    protected $_collectionFactory; 
-    protected $_resourceFactory; 
+    protected $_resource_grid_collection = null;
+    protected $_reportsData = null;
+    protected $_collectionFactory;
+    protected $_resourceFactory;
     protected $_registry = null;
     protected $_objectManager;
     protected $_scopeConfig;
@@ -58,7 +58,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {
-        $this->_objectManager = $objectManager; 
+        $this->_objectManager = $objectManager;
         $this->_registry = $registry;
         $this->_resourceFactory = $resourceFactory;
         $this->_collectionFactory = $collectionFactory;
@@ -72,7 +72,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @return void
      */
     protected function _construct()
-    { 
+    {
         parent::_construct();
         $this->setFilterVisibility(false);
         $this->setPagerVisibility(false);
@@ -102,26 +102,29 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         }
     }
 
-    public function getColumnOrder() {
+    public function getColumnOrder()
+    {
         return $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
     }
 
-    public function getColumnDir() {
+    public function getColumnDir()
+    {
         return $columnId = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
     }
 
     //Add following function
-    protected function _prepareTotals($columns = null){
-          $columns=explode(',',$columns);
-          if(!$columns){
+    protected function _prepareTotals($columns = null)
+    {
+          $columns= !empty($columns) ? explode(',',$columns) : null;
+          if(!$columns) {
             return;
           }
-          $this->_countTotals = true;   
+          $this->_countTotals = true;
           $totals = new \Magento\Framework\DataObject();
           $fields = array();
           foreach($columns as $column){
             $fields[$column]    = 0;
-          } 
+          }
           foreach ($this->getCollection() as $item) {
             foreach($fields as $field=>$value){
               $fields[$field]+=$item->getData($field);
@@ -135,8 +138,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getResourceCollectionName()
     {
         return $this->_resourceCollectionName;
-    } 
-    
+    }
+
     /**
      * @return \Magento\Framework\Data\Collection
      */
@@ -209,7 +212,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $filterData = $this->getFilterData();
         if ($filterData) {
-            $storeIds = explode(',', $filterData->getData('store_ids'));
+            $storeIdsString = $filterData->getData('store_ids');
+            $storeIds = !empty($storeIdsString) ? explode(',', $storeIdsString) : [];
         } else {
             $storeIds = array();
         }
@@ -232,6 +236,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_storeIds = $storeIds;
         return $this;
     }
+
   /**
      * @return string|\Magento\Directory\Model\Currency $currencyCode
      */

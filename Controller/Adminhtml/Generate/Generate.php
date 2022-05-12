@@ -81,12 +81,13 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
      */
     public function execute()
     {
-        // $data = $this->getRequest()->getPostValue();
-        $requestData = $this->_objectManager->get(
-            'Magento\Backend\Helper\Data'
-        )->prepareFilterString(
-            $this->getRequest()->getParam('filter')
-        );
+        if ($filter = $this->getRequest()->getParam('filter')) {
+            $requestData = $this->_objectManager->get(
+                'Magento\Backend\Helper\Data'
+            )->prepareFilterString(
+                $filter
+            );
+        }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

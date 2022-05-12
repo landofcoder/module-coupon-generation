@@ -257,7 +257,7 @@ class Save extends \Magento\Backend\App\Action
                                                     "usage_per_customer" => $usage_per_customer,
                                                     "expiration_date" => $expiration_date,
                                                     "times_used" => $times_used,
-                                                    "is_primary" => $is_primary,
+                                                    //"is_primary" => $is_primary,
                                                     "created_at" => $created_at,
                                                     "type" => $type
                                                 ];
