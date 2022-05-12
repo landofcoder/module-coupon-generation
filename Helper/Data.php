@@ -103,6 +103,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->resource                     = $resource;
     }
 
+    /**
+     * Send email
+     *
+     * @param string $emailFrom
+     * @param string $emailTo
+     * @param string emailidentifier
+     * @param mixed $templateVar
+     * @return void
+     */
     public function sendMail($emailFrom, $emailTo, $emailidentifier, $templateVar)
     {
         $this->inlineTranslation->suspend();
@@ -122,10 +131,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $transport->sendMessage();
         $this->inlineTranslation->resume();
     }
+
+    /**
+     * get config
+     *
+     * @param string $key
+     * @param mixed $store
+     * @return mixed
+     */
     public function getConfig($key, $store = null)
     {
         $store = $this->_storeManager->getStore($store);
-        $websiteId = $store->getWebsiteId();
+        //$websiteId = $store->getWebsiteId();
         $result = $this->scopeConfig->getValue(
             'lofcouponcode/' . $key,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -134,17 +151,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $result;
     }
 
+    /**
+     * Get rule data
+     *
+     * @param int $ruleId
+     * @return \Magento\SalesRule\Model\Rule
+     */
     public function getRuleData($ruleId)
     {
         $modelRule = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
         $collection = $modelRule->load($ruleId);
         return $collection;
     }
+
+    /**
+     * Filter string
+     *
+     * @param string $str
+     * @return string
+     */
     public function filter($str)
     {
         $html = $this->_filterProvider->getPageFilter()->filter($str);
         return $html;
     }
+
     public function getCouponRuleData($ruleId)
     {
         if (!isset($this->_coupon_rule_model[$ruleId])) {
@@ -159,6 +190,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return $this->_coupon_rule_model[$ruleId];
     }
+
     /**
     * Generate coupon code
     *

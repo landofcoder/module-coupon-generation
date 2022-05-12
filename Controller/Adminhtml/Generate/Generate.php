@@ -1,18 +1,18 @@
 <?php
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -24,7 +24,7 @@ namespace Lof\CouponCode\Controller\Adminhtml\Generate;
 class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
 {
     CONST EMAILIDENTIFIER = 'sent_mail_with_customer';
- 
+
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -64,7 +64,7 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
         \Lof\CouponCode\Model\CouponFactory $lofCouponFactory,
         \Magento\Framework\UrlInterface $urlInterface,
         \Magento\Store\Model\StoreManagerInterface $storeManager
-        ) {
+    ) {
         $this->_couponHelper = $helper;
         $this->couponFactory = $couponFactory;
         $this->dateTime = $dateTime;
@@ -73,18 +73,21 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
         $this->lofCoupon = $lofCouponFactory;
         $this->_urlInterface = $urlInterface;
         $this->_storeManager   = $storeManager;
-        parent::__construct($context, $coreRegistry); 
+        parent::__construct($context, $coreRegistry);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute()
     {
-        // $data = $this->getRequest()->getPostValue();  
+        // $data = $this->getRequest()->getPostValue();
         $requestData = $this->_objectManager->get(
             'Magento\Backend\Helper\Data'
         )->prepareFilterString(
             $this->getRequest()->getParam('filter')
         );
-        
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($requestData && isset($requestData['coupon_rule_id'])) {
@@ -95,16 +98,13 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
                 $couponRuleId = $requestData['coupon_rule_id'];
                 $couponRuleData = $this->_couponHelper->getCouponRuleData($couponRuleId);
                 $ruleId = (int)$couponRuleData->getRuleId();
-                if($ruleId) { 
+                if($ruleId) {
                     $limit_time_generated_coupon = (int)$couponRuleData->getLimitGenerated();
 
                     $coupon_collection = $this->_objectManager->create('Lof\CouponCode\Model\Coupon')->getCollection();
                     $number_generated_coupon = (int)$coupon_collection->getTotalByEmail($requestData['email_visitor'], $ruleId);
                     if($limit_time_generated_coupon <= 0 || ($number_generated_coupon < $limit_time_generated_coupon)) {//check number coupons was generated for same email address
-
-
                         $coupon = $this->couponFactory->create();
-
                         $emailFrom = $this->_couponHelper->getConfig('general_settings/sender_email_identity');
                         $emailidentifier = self::EMAILIDENTIFIER;
 
@@ -137,9 +137,9 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
                             $simple_action = $couponRuleData->getSimpleAction();
                             $discount_amount_formatted = $couponRuleData->getDiscountAmount();
                             if($simple_action == 'by_percent') {
-                                $discount_amount_formatted .='%'; 
+                                $discount_amount_formatted .='%';
                             }elseif($simple_action == 'fixed'){
-                                $discount_amount_formatted ='$'.$discount_amount_formatted; 
+                                $discount_amount_formatted ='$'.$discount_amount_formatted;
                             }
 
                             $templateVar = array(
@@ -152,7 +152,7 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
                                 'discount_amount_formatted' => $discount_amount_formatted,
                                 'link_website' => $this->_storeManager->getStore()->getBaseUrl()
                             );
-                            
+
                             $couponsGeneratedOld =$couponRuleData->getCouponsGenerated();
                             $couponGenerateNew = $couponsGeneratedOld + 1;
                             $couponRuleData->setData('coupons_generated', $couponGenerateNew)->save();
@@ -160,7 +160,7 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
 
                             $allow_send_email = $this->_couponHelper->getConfig('general_settings/send_email_coupon');
                             if($allow_send_email) {
-                                $this->_couponHelper->sendMail($emailFrom,$emailTo,$emailidentifier,$templateVar); 
+                                $this->_couponHelper->sendMail($emailFrom,$emailTo,$emailidentifier,$templateVar);
                                 $this->messageManager->addSuccess(__('A coupon code has been sent to %1.', $emailTo));
                             } else {
                                 $this->messageManager->addSuccess(__('A coupon code has been generated.'));
@@ -195,7 +195,7 @@ class Generate extends \Lof\CouponCode\Controller\Adminhtml\Generate
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($requestData);
                 $this->_redirect('*/*/');
             }
-        }else {
+        } else {
             $this->messageManager->addError(
                 __('Please choose a coupon rule to generate.')
                 );

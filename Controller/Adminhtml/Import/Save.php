@@ -1,18 +1,18 @@
 <?php
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -48,11 +48,6 @@ class Save extends \Magento\Backend\App\Action
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
-
-    /**
-     * @var \Ves\Setup\Helper\Import
-     */
-    protected $_vesImport;
 
     /**
      * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
@@ -120,14 +115,14 @@ class Save extends \Magento\Backend\App\Action
                 ['fileId' => 'data_import_file']
             );
 
-            $fileContent = '';
+            //$fileContent = '';
             if($uploader) {
                 $tmpDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')->getDirectoryRead(DirectoryList::TMP);
                 $savePath     = $tmpDirectory->getAbsolutePath('lof/import');
                 $uploader->setAllowRenameFiles(true);
                 $result       = $uploader->save($savePath);
                 $filePath = $tmpDirectory->getAbsolutePath('lof/import/' . $result['file']);
-                $fileContent  = file_get_contents($tmpDirectory->getAbsolutePath('lof/import/' . $result['file']));
+                //$fileContent  = file_get_contents($tmpDirectory->getAbsolutePath('lof/import/' . $result['file']));
             }
         } catch (\Exception $e) {
             $this->messageManager->addError(__("Can't import data<br/> %1", $e->getMessage()));
@@ -142,20 +137,23 @@ class Save extends \Magento\Backend\App\Action
         }
         // ----------------. Explode string to array .--------------
 
-        foreach ($importData as &$result) {
-            $result = explode(";", $result[0]);
+        $heading = [];
+        if( $importData && isset($importData[0]) ) {
+            $heading = $importData[0];
+            unset($importData[0]);
         }
 
         // ----------------. End explode .--------------------------
-        $store = isset($data['store_id'])? $this->_storeManager->getStore($data['store_id']) : 0;
-        $connection = $this->_resource->getConnection();
+        //$store = isset($data['store_id'])? $this->_storeManager->getStore($data['store_id']) : 0;
+        //$connection = $this->_resource->getConnection();
         if(!empty($importData)) {
             try{
-                $heading = $importData[0];
-                unset($importData[0]);
+                //$heading = $importData[0];
                 $code_index = array_search("code", $heading);
                 $rule_id_index = array_search("rule_id", $heading);
-                if($code_index !== false && $rule_id_index !== false) {
+                $coupon_rule_id_index = array_search("coupon_rule_id", $heading);
+
+                if ($code_index !== false && ($rule_id_index !== false || $coupon_rule_id_index !== false)) {
                     $imported_counter = 0;
 
                     $coupon_id_index = array_search("coupon_id", $heading);
@@ -169,12 +167,14 @@ class Save extends \Magento\Backend\App\Action
                     $is_primary_index = array_search("is_primary", $heading);
                     $created_at_index = array_search("created_at", $heading);
                     $type_index = array_search("type", $heading);
-                    foreach($importData as $item_data) {
+                    foreach ($importData as $item_data) {
+
                         $coupon_code = $item_data[$code_index];
                         $coupon_code = trim($coupon_code);
-                        $rule_id = $item_data[$rule_id_index];
-                        $rule_id = trim($rule_id);
-
+                        $rule_id = ($rule_id_index !== false) && isset($item_data[$rule_id_index]) ? $item_data[$rule_id_index] : 0;
+                        $rule_id = $rule_id ? trim($rule_id) : 0;
+                        $coupon_rule_id = ($coupon_rule_id_index !== false) && isset($item_data[$coupon_rule_id_index]) ? $item_data[$coupon_rule_id_index] : 0;
+                        $coupon_rule_id = $coupon_rule_id ? trim($coupon_rule_id) : 0;
                         $coupon_id = 0;
                         $email = "";
                         $alias = "";
@@ -189,7 +189,7 @@ class Save extends \Magento\Backend\App\Action
                             $coupon_id = $item_data[$coupon_id_index];
                             $coupon_id = trim($coupon_id);
                         }
-                        if($email_index !== false){
+                        if($email_index !== false) {
                             $email = $item_data[$email_index];
                             $email = trim($email);
                         }
@@ -213,80 +213,92 @@ class Save extends \Magento\Backend\App\Action
                             $times_used = $item_data[$times_used_index];
                             $times_used = trim($times_used);
                         }
-                        if($is_primary_index !== false){
+                        if ($is_primary_index !== false) {
                             $is_primary = $item_data[$is_primary_index];
                             $is_primary = trim($is_primary);
                         }
-                        if($expiration_date_index !== false){
+                        if ($expiration_date_index !== false) {
                             $expiration_date = $item_data[$expiration_date_index];
                             $expiration_date = trim($expiration_date);
                         }
-                        if($created_at_index !== false && $item_data[$created_at_index]){
+                        if ($created_at_index !== false && $item_data[$created_at_index]) {
                             $created_at = $item_data[$created_at_index];
                             $created_at = trim($created_at);
                         }
-                        if($type_index !== false){
+                        if ($type_index !== false) {
                             $type = $item_data[$type_index];
                             $type = trim($type);
                             $type = (int)$type;
                         }
-                        if($coupon_code && $rule_id) {
-                            $coupon_model = $this->_objectManager->create('Lof\CouponCode\Model\Coupon');
-                            $rule_model = $this->_objectManager->create('Lof\CouponCode\Model\ResourceModel\Rule');
-                            if($rule_model->lookupRuleByid($rule_id)){
-                                if($alias){
-                                    $coupon_model->getCouponByAlias($alias);
-                                }
-                                $mage_coupon_data = [
-                                                        "code" => $coupon_code,
-                                                        "rule_id" => $rule_id,
-                                                        "usage_limit" => $usage_limit,
-                                                        "usage_per_customer" => $usage_per_customer,
-                                                        "expiration_date" => $expiration_date,
-                                                        "times_used" => $times_used,
-                                                        "is_primary" => $is_primary,
-                                                        "created_at" => $created_at,
-                                                        "type" => $type
-                                                    ];
-                                $mage_coupon_model = $this->_objectManager->create('Magento\SalesRule\Model\Coupon');
-
-                                if($coupon_id){
-                                   $mage_coupon_model->load((int)$coupon_id);
-                                }
-                                if(!$mage_coupon_model->getId() && $coupon_model->getCouponId()){
-                                    $coupon_id = $coupon_model->getCouponId();
-                                    $mage_coupon_model->load($coupon_id);
-                                }
-                                $mage_coupon_model->setData($mage_coupon_data);
-                                $mage_coupon_model->save();
-
-                                if(!$coupon_id && $mage_coupon_model->getId()){
-                                    $coupon_id = $mage_coupon_model->getId();
-                                }
-
-                                $data = [
-                                        "code" => $coupon_code,
-                                        "coupon_id" => (int)$coupon_id,
-                                        "rule_id" => (int)$rule_id,
-                                        "email" => $email,
-                                        "alias" => $alias,
-                                        "customer_id" => (int)$customer_id
-                                    ];
-                                $coupon_model->setData($data);
-                                $coupon_model->save();
+                        if ($coupon_code && ($rule_id || $coupon_rule_id)) {
+                            $couponModel = $this->_objectManager->create('Lof\CouponCode\Model\Coupon');
+                            $ruleModel = $this->_objectManager->create('Lof\CouponCode\Model\ResourceModel\Rule');
+                            $ruleData = null;
+                            if ($rule_id) {
+                                $ruleData = $ruleModel->lookupSalesRule($rule_id);
+                            } else {
+                                $ruleData = $ruleModel->lookupRuleByid($coupon_rule_id);
                             }
 
-                        }
-                        $imported_counter++;
-                    }
+                            if (!empty($ruleData) && isset($ruleData["rule_id"])) {
+                                $couponcode_id = 0;
+                                if ($alias) {
+                                    $couponModel->getCouponByAlias($alias);
+                                    $couponcode_id = $couponModel->getId();
+                                } else {
+                                    $couponModel->getCouponByCode($coupon_code);
+                                    $couponcode_id = $couponModel->getId();
+                                }
 
-                    if($imported_counter > 0)
+                                $mageCouponData = [
+                                                    "code" => $coupon_code,
+                                                    "rule_id" => $ruleData["rule_id"],
+                                                    "usage_limit" => $usage_limit,
+                                                    "usage_per_customer" => $usage_per_customer,
+                                                    "expiration_date" => $expiration_date,
+                                                    "times_used" => $times_used,
+                                                    "is_primary" => $is_primary,
+                                                    "created_at" => $created_at,
+                                                    "type" => $type
+                                                ];
+
+                                $mageCouponModel = $this->_objectManager->create('Magento\SalesRule\Model\Coupon');
+                                if ($coupon_id) {
+                                   $mageCouponModel->load((int)$coupon_id);
+                                }
+                                if (!$mageCouponModel->getId() && $couponModel->getCouponId()) {
+                                    $coupon_id = $couponModel->getCouponId();
+                                    $mageCouponModel->load($coupon_id);
+                                }
+                                $mageCouponData["coupon_id"] = $mageCouponModel->getId() ? (int)$mageCouponModel->getId() : null;
+                                $mageCouponModel->setData($mageCouponData);
+                                $mageCouponModel->save();
+
+                                if (!$coupon_id && $mageCouponModel->getId()) {
+                                    $coupon_id = $mageCouponModel->getId();
+                                }
+                                $data = [
+                                    "code" => $coupon_code,
+                                    "coupon_id" => (int)$coupon_id,
+                                    "rule_id" => (int)$ruleData["rule_id"],
+                                    "email" => $email,
+                                    "alias" => $alias,
+                                    "customer_id" => (int)$customer_id,
+                                    "couponcode_id" => $couponcode_id
+                                ];
+                                $couponModel->setData($data);
+                                $couponModel->save();
+                                $imported_counter++;
+                            }
+                        }
+                    }
+                    if ($imported_counter > 0)
                         $this->messageManager->addSuccess(__("Import successfully"));
                 } else {
                     $this->messageManager->addError(__("Required there columns: code and rule_id"));
                 }
 
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 $this->messageManager->addError(__("Can't import data<br/> %1", $e->getMessage()));
             }
         }

@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * http://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_FollowUpEmail
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -31,21 +31,21 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
-    
+
     /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connectionName = null
-        ) {
+    ) {
         parent::__construct($context, $connectionName);
-        $this->_storeManager = $storeManager; 
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -56,26 +56,30 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('lof_couponcode_rule', 'coupon_rule_id');
-    } 
-        /**
+    }
+
+    /**
      * Retrieve default attribute set id
      *
      * @return int
      */
-
-    public function getEntityType(){
-         if (empty($this->_type)) {
+    public function getEntityType()
+    {
+        if (empty($this->_type)) {
             $this->setType(\Magento\Catalog\Model\Product::ENTITY);
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if($attribute = $object->getData('customer_group_ids')){
+        if ($attribute = $object->getData('customer_group_ids')) {
             $table = $this->getTable('salesrule_customer_group');
             $where = ['rule_id = ?' => (int)$object->getRuleId()];
-            $this->getConnection()->delete($table, $where); 
-            $data = []; 
+            $this->getConnection()->delete($table, $where);
+            $data = [];
             foreach ($attribute as $k => $_attribute) {
                 $data[] = [
                 'customer_group_id' => $_attribute,
@@ -84,7 +88,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
             $this->getConnection()->insertMultiple($table, $data);
         }
-        if($stores = $object->getData('website_ids')){
+        if ($stores = $object->getData('website_ids')) {
             $table = $this->getTable('salesrule_website');
             $where = ['rule_id = ?' => (int)$object->getRuleId()];
             $this->getConnection()->delete($table, $where);
@@ -93,19 +97,16 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 foreach ($stores as $storeId) {
                     $data[] = ['rule_id' => (int)$object->getRuleId(), 'website_id' => (int)$storeId];
                 }
-                try{
+                try {
                     $this->getConnection()->insertMultiple($table, $data);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     die($e->getMessage());
                 }
             }
         }
 
         return parent::_afterSave($object);
-
-
     }
-
 
     /**
      * Perform operations after object load
@@ -114,7 +115,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
-    { 
+    {
         if ($object->getRuleId()) {
             //Set SalesRule Data
             $salesrule = $this->lookupSalesRule($object->getId());
@@ -129,71 +130,97 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $stores = $this->lookupStoreIds($object->getRuleId());
             $object->setData('website_ids', $stores);
             $object->setData('website_id', $stores);
-
         }
         return parent::_afterLoad($object);
-
     }
-       /**
+
+    /**
      * Get store ids to which specified item is assigned
      *
      * @param int $id
      * @return mixed
      */
-       public function lookupStoreIds($id)
-       {
+    public function lookupStoreIds($id)
+    {
         $connection = $this->getConnection();
-
-        $select = $connection->select()->from(
-            $this->getTable('salesrule_website'),
-            'website_id'
+        $select = $connection->select()
+            ->from(
+                $this->getTable('salesrule_website'),
+                'website_id'
             )->where(
-            'rule_id = :rule_id'
+                'rule_id = :rule_id'
             );
-            $binds = [':rule_id' => (int)$id];
-            //die(print_r($connection->fetchCol($select, $binds)->getData());
-            return $connection->fetchCol($select, $binds);
-        }
+        $binds = [':rule_id' => (int)$id];
+        return $connection->fetchCol($select, $binds);
+    }
 
-        /**
+    /**
      * Get customer group ids to which specified item is assigned
      *
      * @param int $id
      * @return mixed
      */
-        public function lookupCustomerGroupIds($id)
-        {
-            $connection = $this->getConnection();
-            $select = $connection->select()->from($this->getTable('salesrule_customer_group'),'customer_group_id')->where(
-                'rule_id = :rule_id'
-                );
-            $binds = [':rule_id' => (int)$id];
-            return $connection->fetchCol($select, $binds);
-        }
-        public function lookupSalesRule($id)
-        {
-            $connection = $this->getConnection();
-            $select = $connection->select()->from(['lofrule' => $this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id')->where(
-                'coupon_rule_id = :coupon_rule_id'
-                )->limit(1);
-            $binds = [':coupon_rule_id' => (int)$id];
-            return $connection->fetchRow($select, $binds);
-        }
-// ------------------------------------
-        public function lookupRuleByid($id)
-        {
-            $connection = $this->getConnection();
-            $select = $connection->select()->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id')->where(
+    public function lookupCustomerGroupIds($id)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getTable('salesrule_customer_group'),'customer_group_id')
+            ->where(
+            'rule_id = :rule_id'
+            );
+        $binds = [':rule_id' => (int)$id];
+        return $connection->fetchCol($select, $binds);
+    }
+
+    /**
+     * lookup rule by sale rule id
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function lookupRuleByid($id)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from(['lofrule' => $this->getTable('lof_couponcode_rule')])
+            ->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id')
+            ->where(
+            'coupon_rule_id = :coupon_rule_id'
+            )->limit(1);
+        $binds = [':coupon_rule_id' => (int)$id];
+        return $connection->fetchRow($select, $binds);
+    }
+
+    /**
+     * lookup rule by id
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function lookupSalesRule($id)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+                ->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])
+                ->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id')
+                ->where(
                 'lofrule.rule_id = :rule_id'
                 )->limit(1);
-            $binds = [':rule_id' => (int)$id];
-            return $connection->fetchRow($select, $binds);
-        }
-// --------------------------. GET all rules
-        public function getRuleData()
-        {
-            $connection = $this->getConnection();
-            $select = $connection->select()->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id');
-            return $connection->fetchAll($select);
-        }
+        $binds = [':rule_id' => (int)$id];
+        return $connection->fetchRow($select, $binds);
     }
+
+    /**
+     * get rule Data
+     *
+     * @return mixed
+     */
+    public function getRuleData()
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+                ->from(['lofrule' =>$this->getTable('lof_couponcode_rule')])
+                ->join(array('salesrule' => $this->getTable('salesrule')), 'lofrule.rule_id = salesrule.rule_id');
+        return $connection->fetchAll($select);
+    }
+}

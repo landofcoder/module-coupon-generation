@@ -1,0 +1,6 @@
+code,coupon_rule_id,email,alias,customer_id,usage_limit,usage_per_customer,expiration_date,times_used,created_at,type
+ABC123LFO,1,customer2@gmail.com,my-coupon1,0,10,1,2022-05-28,0,2022-01-20,0
+ABC125LFO,1,customer3@gmail.com,my-coupon2,0,10,1,2022-06-22,0,2022-02-02,1
+ABC12467LFO,1,,,0,0,0,2022-07-26,1,2022-01-10,1
+ABC212467LFO,1,customer4@gmail.com,,0,0,0,2022-07-26,1,2022-01-10,1
+ABC312467LFO,1,customer5@gmail.com,,0,0,0,2022-07-26,1,2022-01-10,1

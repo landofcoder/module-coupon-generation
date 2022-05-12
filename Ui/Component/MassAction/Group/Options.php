@@ -1,18 +1,18 @@
 <?php
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -70,6 +70,7 @@ class Options implements \JsonSerializable
      * @var array
      */
     protected $additionalData = [];
+
     /**
      * @var \Magento\Framework\App\ResourceConnection
      */
@@ -78,8 +79,8 @@ class Options implements \JsonSerializable
     public function __construct(
         CollectionFactory $collectionFactory,
         UrlInterface $urlBuilder,
-        array $data = [],
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->data = $data;
@@ -92,7 +93,7 @@ class Options implements \JsonSerializable
      *
      * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         if ($this->options === null) {
             $lofRuleTable = $this->resource->getTableName('lof_couponcode_rule');
@@ -103,7 +104,7 @@ class Options implements \JsonSerializable
                 ['coupon_rule_id'],
                 null,
                 'left'
-                ); 
+                );
             $this->prepareData();
             if(count($options->getData())){
             foreach ($options->getData() as $optionCode) {
@@ -127,7 +128,7 @@ class Options implements \JsonSerializable
             }
             $this->options = array_values($this->options);
             }
-            
+
 
         }
 

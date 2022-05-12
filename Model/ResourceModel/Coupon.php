@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * http://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_FollowUpEmail
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -31,21 +31,21 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
-    
+
     /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connectionName = null
-        ) {
+    ) {
         parent::__construct($context, $connectionName);
-        $this->_storeManager = $storeManager; 
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -56,18 +56,20 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('lof_couponcode_coupon', 'couponcode_id');
-    } 
+    }
         /**
      * Retrieve default attribute set id
      *
      * @return int
      */
 
-    public function getEntityType(){
-         if (empty($this->_type)) {
+    public function getEntityType()
+    {
+        if (empty($this->_type)) {
             $this->setType(\Magento\Catalog\Model\Product::ENTITY);
         }
     }
+
     /**
      * Perform operations after object load
      *
@@ -75,7 +77,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
-    { 
+    {
         if ($object->getRuleId()) {
             //Set SalesRule Data
             $salesrule = $this->lookupSalesRule($object->getRuleId());
@@ -116,8 +118,14 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         }
         return parent::_afterLoad($object);
-
     }
+
+    /**
+     * lookup rule by sale rule id
+     *
+     * @param int $id
+     * @return mixed
+     */
     public function lookupSalesRule($id)
     {
         $connection = $this->getConnection();
@@ -128,6 +136,12 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $connection->fetchRow($select, $binds);
     }
 
+    /**
+     * lookup rule by sale rule id
+     *
+     * @param int $id
+     * @return mixed
+     */
     public function lookupSalesCoupon($coupon_id)
     {
         $connection = $this->getConnection();

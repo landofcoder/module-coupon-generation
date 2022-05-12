@@ -2,18 +2,18 @@
 <!--
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -33,7 +33,7 @@
                     <label>Enable Module</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                
+
                 <field id="barcode_folder" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Barcode Folder</label>
                     <comment>Input Barcode Image Folder Path. Default: barcode</comment>
@@ -67,7 +67,7 @@
                     <label>Redeem Url</label>
                     <depends><field id="allow_redeem">1</field></depends>
                 </field>
-                
+
                 <field id="send_email_coupon" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Send Email</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
