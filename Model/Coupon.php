@@ -1,18 +1,18 @@
 <?php
 /**
  * Venustheme
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Venustheme
  * @package    Ves_Testimonial
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.venustheme.com/)
@@ -49,14 +49,14 @@ class Coupon extends \Magento\Framework\Model\AbstractModel implements CouponInt
      * Page cache tag
      */
     /**
-     * @param \Magento\Framework\Model\Context                          $context                  
-     * @param \Magento\Framework\Registry                               $registry                 
+     * @param \Magento\Framework\Model\Context                          $context
+     * @param \Magento\Framework\Registry                               $registry
      * @param \Lof\CouponCode\Model\ResourceModel\Coupon|null                $resource
-     * @param \Lof\CouponCode\Model\ResourceModel\Coupon\Collection|null $resourceCollection                 
-     * @param \Lof\CouponCode\Model\ResourceModel\Coupon\CollectionFactory|null $couponCollection      
-     * @param \Magento\Store\Model\StoreManagerInterface                $storeManager             
-     * @param \Magento\Framework\UrlInterface                           $url                      
-     * @param array                                                     $data                     
+     * @param \Lof\CouponCode\Model\ResourceModel\Coupon\Collection|null $resourceCollection
+     * @param \Lof\CouponCode\Model\ResourceModel\Coupon\CollectionFactory|null $couponCollection
+     * @param \Magento\Store\Model\StoreManagerInterface                $storeManager
+     * @param \Magento\Framework\UrlInterface                           $url
+     * @param array                                                     $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -91,6 +91,20 @@ class Coupon extends \Magento\Framework\Model\AbstractModel implements CouponInt
     public function getCouponByAlias($alias){
         $this->_beforeLoad($alias, 'alias');
         $this->_getResource()->load($this, $alias, 'alias');
+        $this->_afterLoad();
+        $this->setOrigData();
+        $this->_hasDataChanges = false;
+        return $this;
+    }
+
+    /**
+     * Load object data by code
+     * @param string $couponCode
+     * @return $this
+     */
+    public function getCouponByCode($couponCode){
+        $this->_beforeLoad($couponCode, 'code');
+        $this->_getResource()->load($this, $couponCode, 'code');
         $this->_afterLoad();
         $this->setOrigData();
         $this->_hasDataChanges = false;

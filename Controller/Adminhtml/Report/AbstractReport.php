@@ -1,18 +1,18 @@
 <?php
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -38,7 +38,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * @var TimezoneInterface
      */
     protected $timezone;
-    protected $_registry = null; 
+    protected $_registry = null;
 
 
     /**
@@ -89,7 +89,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     public function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_addBreadcrumb(__('Reports'), __('Reports')); 
+        $this->_addBreadcrumb(__('Reports'), __('Reports'));
         return $this;
     }
 
@@ -105,11 +105,13 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
             $blocks = [$blocks];
         }
 
-        $requestData = $this->_objectManager->get(
-            'Magento\Backend\Helper\Data'
-        )->prepareFilterString(
-            $this->getRequest()->getParam('loffilter')
-        );
+        if ($loffilter = $this->getRequest()->getParam('loffilter')) {
+            $requestData = $this->_objectManager->get(
+                'Magento\Backend\Helper\Data'
+            )->prepareFilterString(
+                $loffilter
+            );
+        }
         $inputFilter = new \Zend_Filter_Input(
             ['from' => $this->_dateFilter, 'to' => $this->_dateFilter],
             [],
@@ -133,7 +135,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         }
 
         return $this;
-    }   
+    }
 
     /**
      * Add refresh statistics links
