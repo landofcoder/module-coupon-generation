@@ -2,18 +2,18 @@
 <!--
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -122,7 +122,7 @@
     </virtualType>
     <virtualType name="CouponCodeCouponGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Lof\CouponCode\Model\ResourceModel\Rule\Collection</argument>
+            <argument name="collection" xsi:type="object" shared="false">Lof\CouponCode\Model\ResourceModel\Coupon\Collection</argument>
             <argument name="filterPool" xsi:type="object" shared="false">CouponGirdFilterPool</argument>
         </arguments>
     </virtualType>
