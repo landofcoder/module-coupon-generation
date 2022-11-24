@@ -106,30 +106,28 @@ class Options implements \JsonSerializable
                 'left'
                 );
             $this->prepareData();
-            if(count($options->getData())){
-            foreach ($options->getData() as $optionCode) {
-                $this->options[$optionCode['coupon_rule_id']] = [
-                    'type' => 'rule_' . $optionCode['coupon_rule_id'],
-                    'label' => $optionCode['name'],
-                ];
+            if (count($options->getData())) {
+                foreach ($options->getData() as $optionCode) {
+                    $this->options[$optionCode['coupon_rule_id']] = [
+                        'type' => 'rule_' . $optionCode['coupon_rule_id'],
+                        'label' => $optionCode['name'],
+                    ];
 
 
-                if ($this->urlPath && $this->paramName) {
-                    $this->options[$optionCode['coupon_rule_id']]['url'] = $this->urlBuilder->getUrl(
-                        $this->urlPath,
-                        [$this->paramName => $optionCode['coupon_rule_id']]
+                    if ($this->urlPath && $this->paramName) {
+                        $this->options[$optionCode['coupon_rule_id']]['url'] = $this->urlBuilder->getUrl(
+                            $this->urlPath,
+                            [$this->paramName => $optionCode['coupon_rule_id']]
+                        );
+                    }
+
+                    $this->options[$optionCode['coupon_rule_id']] = array_merge_recursive(
+                        $this->options[$optionCode['coupon_rule_id']],
+                        $this->additionalData
                     );
                 }
-
-                $this->options[$optionCode['coupon_rule_id']] = array_merge_recursive(
-                    $this->options[$optionCode['coupon_rule_id']],
-                    $this->additionalData
-                );
+                $this->options = array_values($this->options);
             }
-            $this->options = array_values($this->options);
-            }
-
-
         }
 
         return $this->options;
