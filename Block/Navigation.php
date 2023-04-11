@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * http://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_MarketPlace
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -37,15 +37,14 @@ class Navigation extends \Magento\Framework\View\Element\Html\Link\Current
     public function __construct(
        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\App\DefaultPathInterface $defaultPath,
-        \Magento\Customer\Model\Session $customerSession, 
-
+        \Magento\Customer\Model\Session $customerSession,
         array $data = []
     ) {
 
         $this->session           = $customerSession;
-        parent::__construct($context, $defaultPath);
+        parent::__construct($context, $defaultPath, $data);
     }
- 
+
      /**
      * Render block HTML
      *
@@ -58,7 +57,7 @@ class Navigation extends \Magento\Framework\View\Element\Html\Link\Current
         }
 
         $html        = '';
-          $highlight   = '';
+        $highlight   = '';
 
         if ($this->getIsHighlighted()) {
             $highlight = ' current';

@@ -1,7 +1,7 @@
 <?php
 if($coupon_log) {
 	$data = $coupon_log->getOrigData();
-	$discount_amount = $block->DiscountAmountFormat($data['rule_id'],$coupon_log->getDiscountAmount());
+	$discount_amount = $block->discountAmountFormat($data['rule_id'],$coupon_log->getDiscountAmount());
 ?>
 <div class="block trackcoupon-info-block">
 	<div class="block-title">

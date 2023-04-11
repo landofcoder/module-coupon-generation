@@ -17,14 +17,26 @@ class Index extends \Magento\Framework\View\Element\Template
      */
     protected $_collection = null;
 
+    /**
+     * @var \Lof\CouponCode\Model\RuleFactory
+     */
+    protected $_ruleFactory;
+
+    /**
+     * @var mixed|array
+     */
+    protected $_rules = [];
+
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\SessionFactory $customerSessionFactory,
         \Lof\CouponCode\Model\CouponFactory $gridFactory,
+        \Lof\CouponCode\Model\RuleFactory $ruleFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_gridFactory = $gridFactory;
+        $this->_ruleFactory = $ruleFactory;
         $this->customerSessionFactory = $customerSessionFactory;
     }
 
@@ -86,9 +98,24 @@ class Index extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * get coupon rule by id
+     *
+     * @param int $ruleId
+     * @return \Lof\CoupnoCode\Model\Rule
+     */
+    public function getCouponRule(int $ruleId)
+    {
+        if (!isset($this->_rules[$ruleId])) {
+            $this->_rules[$ruleId] = $this->_ruleFactory->create()->loadByRule($ruleId);
+        }
+        return $this->_rules[$ruleId];
+    }
+
+    /**
+     * get pager html
+     *
      * @return string
      */
-    // method for get pager html
     public function getPagerHtml()
     {
         return $this->getChildHtml('pager');
