@@ -1,13 +1,17 @@
-<?php  $_gridrecords = $block->getCollection();?>
-<?php if ($_gridrecords && count($_gridrecords)): ?>
+<?php
+/** @var \Lof\CouponCode\Block\Index $block */
+$_gridrecords = $block->getCollection();
+?>
+<?php if ($_gridrecords && $_gridrecords->count()): ?>
     <div class="table-wrapper orders-history">
         <table class="data table table-order-items history" id="my-orders-table">
-            <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
+            <caption class="table-caption"><?= __('Grid Record') ?></caption>
             <thead>
                 <tr>
-                    <th scope="col" class="col id"><?php echo __('#') ?></th>
-                    <th scope="col" class="col title"><?php echo __('Code') ?></th>
-                    <th scope="col" class="col date"><?php echo __('Email') ?></th>
+                    <th scope="col" class="col id"><?= __('#') ?></th>
+                    <th scope="col" class="col title"><?= __('Code') ?></th>
+                    <th scope="col" class="col email"><?= __('Email') ?></th>
+                    <th scope="col" class="col times-used"><?= __('Times Used') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -15,17 +19,18 @@
                     $no = 1;
                     foreach ($_gridrecords as $_gridrecord): ?>
                     <tr>
-                        <td class="col id"><?php echo $no ?></td>
-                        <td class="col shipping"><?php echo $_gridrecord->getCode() ?></td>
-                        <td class="col status"><?php echo $_gridrecord->getEmail() ?></td>
+                        <td class="col id"><?= $no ?></td>
+                        <td class="col shipping"><?= $_gridrecord->getCode() ?></td>
+                        <td class="col email"><?= $_gridrecord->getEmail() ?></td>
+                        <td class="col times-uses"><?= $_gridrecord->getTimesUsed() ?></td>
                     </tr>
                 <?php $no++; endforeach; ?>
             </tbody>
         </table>
     </div>
     <?php if ($block->getPagerHtml()): ?>
-        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml();?></div>
+        <div class="order-products-toolbar toolbar bottom"><?= $block->getPagerHtml();?></div>
     <?php endif ?>
 <?php else: ?>
-    <div class="message info empty"><span><?php echo __('grid records not available.'); ?></span></div>
+    <div class="message info empty"><span><?= __('No coupon codes availabes.'); ?></span></div>
 <?php endif ?>
