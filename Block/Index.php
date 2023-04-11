@@ -2,52 +2,120 @@
 namespace Lof\CouponCode\Block;
 class Index extends \Magento\Framework\View\Element\Template
 {
-     protected $customerSession;
-     protected $_gridFactory;
-     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Lof\CouponCode\Model\CouponFactory $gridFactory,
-        array $data = []
-     ) {
-        $this->_gridFactory = $gridFactory;
-        parent::__construct($context, $data);
+    /**
+     * @var \Magento\Customer\Model\SessionFactory
+     */
+    protected $customerSessionFactory;
 
-        $om = \Magento\Framework\App\ObjectManager::getInstance();
-        $customerSession = $om->create('Magento\Customer\Model\Session');
-        $customer_id = $customerSession->getCustomer()->getId();
-        $collection = $this->_gridFactory->create()->getCollection();
-        // $collection->addFieldToFilter('customer_id', $customer_id);
-        $collection->getSelect()
-        ->joinLeft(
-            array("coupon_usage"=>'salesrule_coupon_usage'), 
-            'coupon_usage.coupon_id = main_table.coupon_id and coupon_usage.customer_id = main_table.customer_id')
-        ->where('(main_table.customer_id= '. $customer_id .') AND ((coupon_usage.coupon_id IS NULL AND coupon_usage.customer_id IS NULL) Or 
-                    ((coupon_usage.times_used < (SELECT salesrule_coupon.usage_per_customer FROM salesrule_coupon WHERE salesrule_coupon.coupon_id = coupon_usage.coupon_id)) OR ((SELECT salesrule_coupon.usage_per_customer FROM salesrule_coupon WHERE salesrule_coupon.coupon_id = coupon_usage.coupon_id) IS NULL)))');
-        $this->setCollection($collection);
-        $this->pageConfig->getTitle()->set(__('My Coupon Code'));
+    /**
+     * @var \Lof\CouponCode\Model\CouponFactory
+    */
+    protected $_gridFactory;
+
+    /**
+     * @var mixed|null
+     */
+    protected $_collection = null;
+
+    /**
+     * @var \Lof\CouponCode\Model\RuleFactory
+     */
+    protected $_ruleFactory;
+
+    /**
+     * @var mixed|array
+     */
+    protected $_rules = [];
+
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Model\SessionFactory $customerSessionFactory,
+        \Lof\CouponCode\Model\CouponFactory $gridFactory,
+        \Lof\CouponCode\Model\RuleFactory $ruleFactory,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->_gridFactory = $gridFactory;
+        $this->_ruleFactory = $ruleFactory;
+        $this->customerSessionFactory = $customerSessionFactory;
     }
 
+    /**
+     * Get collection
+     *
+     * @return mixed
+     */
+    public function getCollection()
+    {
+        if (!$this->_collection) {
+            $customer_id = $this->customerSessionFactory->create()
+                                ->getCustomer()
+                                ->getId();
+            $collection = $this->_gridFactory->create()->getCollection();
+            // $collection->addFieldToFilter('customer_id', $customer_id);
+            $salesruleCouponTable = $collection->getTable("salesrule_coupon");
+            $collection->getSelect()
+                ->joinLeft(
+                    [ "coupon_usage" => $collection->getTable('salesrule_coupon_usage') ],
+                    'coupon_usage.coupon_id = main_table.coupon_id and coupon_usage.customer_id = main_table.customer_id',
+                    ['times_used']
+                )
+                ->joinLeft(
+                    [ "sc" => $salesruleCouponTable ],
+                    'sc.coupon_id = main_table.coupon_id',
+                    ['usage_limit', 'usage_per_customer', 'expiration_date', 'created_at']
+                )
+                ->where('(main_table.customer_id= '. $customer_id .') AND ((coupon_usage.coupon_id IS NULL AND coupon_usage.customer_id IS NULL) Or
+                            ((coupon_usage.times_used < (SELECT `'.$salesruleCouponTable.'`.usage_per_customer FROM `'.$salesruleCouponTable.'` WHERE `'.$salesruleCouponTable.'`.coupon_id = coupon_usage.coupon_id)) OR ((SELECT `'.$salesruleCouponTable.'`.usage_per_customer FROM `'.$salesruleCouponTable.'` WHERE `'.$salesruleCouponTable.'`.coupon_id = coupon_usage.coupon_id) IS NULL)))');
+            $this->_collection = $collection;
+        }
+        return $this->_collection;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
+
+        $this->pageConfig->getTitle()->set(__('My Coupon Code'));
+
         if ($this->getCollection()) {
             // create pager block for collection
-            $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
-                'lof.couponcode.record.pager'
-            )->setCollection(
-                $this->getCollection() // assign collection to pager
-            );
-            $this->setChild('pager', $pager);// set pager block in layout
+            $childPager = $this->getChildBlock('lof.couponcode.record.pager');
+            if (!$childPager) {
+                $pager = $this->getLayout()->createBlock(
+                    'Magento\Theme\Block\Html\Pager',
+                    'lof.couponcode.record.pager'
+                )->setCollection(
+                    $this->getCollection() // assign collection to pager
+                );
+                $this->setChild('pager', $pager);// set pager block in layout
+            }
         }
         return $this;
     }
 
     /**
+     * get coupon rule by id
+     *
+     * @param int $ruleId
+     * @return \Lof\CoupnoCode\Model\Rule
+     */
+    public function getCouponRule(int $ruleId)
+    {
+        if (!isset($this->_rules[$ruleId])) {
+            $this->_rules[$ruleId] = $this->_ruleFactory->create()->loadByRule($ruleId);
+        }
+        return $this->_rules[$ruleId];
+    }
+
+    /**
+     * get pager html
+     *
      * @return string
      */
-    // method for get pager html
     public function getPagerHtml()
     {
         return $this->getChildHtml('pager');

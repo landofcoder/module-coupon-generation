@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * http://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_FollowUpEmail
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -20,8 +20,6 @@
  */
 
 namespace Lof\CouponCode\Model;
-
-
 
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
@@ -42,14 +40,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     const RULE_ID = 'rule_id';
     const COUPON_RULE_ID = 'coupon_rule_id';
 
- 
     protected $_combineFactory;
 
     /**
      * @var Lof\FollowUpEmail\Model\Earmomg\Rule\Action\CollectionFactory
      */
     protected $_condProdCombineF;
-  
+
     /**
      * AbstractModel constructor.
      *
@@ -75,7 +72,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        //$this->_resource = $resource; 
+        //$this->_resource = $resource;
         $this->_formFactory = $formFactory;
         $this->_localeDate = $localeDate;
         parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
@@ -92,10 +89,35 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         $this->_init('Lof\CouponCode\Model\ResourceModel\Rule');
     }
-    
-    public function loadByAlias($alias) {
+
+    /**
+     * load by alias
+     *
+     * @param string $alias
+     *
+     * @return $this
+     */
+    public function loadByAlias($alias)
+    {
         $this->_beforeLoad($alias, 'rule_key');
         $this->_getResource()->load($this, $alias, 'rule_key');
+        $this->_afterLoad();
+        $this->setOrigData();
+        $this->_hasDataChanges = false;
+        return $this;
+    }
+
+    /**
+     * load by ruleId
+     *
+     * @param int $ruleId
+     *
+     * @return $this
+     */
+    public function loadByRule(int $ruleId)
+    {
+        $this->_beforeLoad($ruleId, 'rule_id');
+        $this->_getResource()->load($this, $ruleId, 'rule_id');
         $this->_afterLoad();
         $this->setOrigData();
         $this->_hasDataChanges = false;
@@ -111,13 +133,20 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         return [self::STATUS_ENABLED => __('Enabled'), self::STATUS_DISABLED => __('Disabled')];
     }
-    public function getAllRule(){
+
+    /**
+     * get all rules
+     *
+     *
+     */
+    public function getAllRule()
+    {
         $collection = $this->getCollection();
         $param = array();
-        foreach ($collection->getData() as $rule ) {                
-            $param[$rule['rule_id']] = $rule['name'];            
+        foreach ($collection->getData() as $rule ) {
+            $param[$rule['rule_id']] = $rule['name'];
         }
-        return $param;        
+        return $param;
     }
 
     public function getCodeFormat()
@@ -125,7 +154,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $param = [
         ['value' => 'rating', 'label' => __('Rating')],
         ['value' => 'cat_position', 'label' => __('Poisition')]
-        ]; 
+        ];
         return [self::ALPHANUMBERIC => __('Alphanumberic'), self::ALPHABETICAL => __('Alphabetical') , self::NUMBERIC => __('Numberic')];
     }
 
@@ -133,7 +162,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         return[self::DAYS => __('Days'), self::WEEKS => __('Weeks'), Self::MONTHS => __('Months'), self::YEARS => __('years')];
     }
- 
+
 
     /**
      * @return Lof\FollowUpEmail\Model\Condition\Combine
@@ -156,7 +185,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $actions = $this->_condProdCombineF1->create();
         return $actions;
     }
-    
+
     public function validateData(\Magento\Framework\DataObject $dataObject)
     {
         $result = [];
@@ -215,7 +244,5 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         return $this->setData(self::COUPON_RULE_ID, $coupon_rule_id);
     }
-
-  
 }
 

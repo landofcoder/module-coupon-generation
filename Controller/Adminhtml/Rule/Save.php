@@ -1,18 +1,18 @@
 <?php
 /**
  * LandofCoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the venustheme.com license that is
  * available through the world-wide-web at this URL:
  * http://venustheme.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   LandofCoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
@@ -23,24 +23,34 @@ namespace Lof\CouponCode\Controller\Adminhtml\Rule;
 
 class Save extends \Lof\CouponCode\Controller\Adminhtml\Rule
 {
- 
+
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
+    /**
+     * construct
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-        ) {
-        parent::__construct($context, $coreRegistry); 
+    ) {
+        parent::__construct($context, $coreRegistry);
         $this->_dateFilter = $dateFilter;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute()
     {
-        $data = $this->getRequest()->getPostValue();         
+        $data = $this->getRequest()->getPostValue();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
@@ -49,11 +59,11 @@ class Save extends \Lof\CouponCode\Controller\Adminhtml\Rule
                 $model = $this->_objectManager->create('Lof\CouponCode\Model\Rule');
                 $model_sale_rule = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
 
-                $inputFilter = new \Zend_Filter_Input(
+                /* $inputFilter = new \Zend_Filter_Input(
                     ['from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter],
                     [],
                     $data
-                );
+                ); */
                 // $data = $inputFilter->getUnescaped();
 
                 $id = $this->getRequest()->getParam('coupon_rule_id');
@@ -68,7 +78,7 @@ class Save extends \Lof\CouponCode\Controller\Adminhtml\Rule
                 }
 
                 $session = $this->_objectManager->get('Magento\Backend\Model\Session');
- 
+
                 $validateResult = $model_sale_rule->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
@@ -89,7 +99,7 @@ class Save extends \Lof\CouponCode\Controller\Adminhtml\Rule
 
                 if (isset($data['rule']['conditions'])) {
                     $data['conditions'] = $data['rule']['conditions'];
-                } 
+                }
                 if (isset($data['rule']['actions'])) {
                     $data['actions'] = $data['rule']['actions'];
                 }
@@ -107,7 +117,7 @@ class Save extends \Lof\CouponCode\Controller\Adminhtml\Rule
                 $model->setData('rule_id',$model_sale_rule->getId());
                 $model->setData('name',$model_sale_rule->getName());
                 $model->save();
-                
+
                 $this->messageManager->addSuccess(__('You saved the Rule.'));
                 $session->setPageData(false);
                 if ($this->getRequest()->getParam('back')) {

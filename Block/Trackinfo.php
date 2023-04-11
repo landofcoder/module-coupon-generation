@@ -21,12 +21,17 @@ class Trackinfo extends \Magento\Framework\View\Element\Template
         $this->_priceCurrency = $priceCurrency;
         parent::__construct($context, $data);
     }
-    protected function _toHtml(){
+
+    /**
+     * @var @inheritdoc
+     */
+    protected function _toHtml()
+    {
         if(!$this->_couponData->getConfig('general_settings/show')) return;
         $coupon_log = $this->_coreRegistry->registry('lofcouponcode_log');
         $sales_order_info = null;
         $currencyCode = $this->_priceCurrency->getStore()->getCurrentCurrencyCode();
-        if($coupon_log && $coupon_log->getOrderId()) {
+        if ($coupon_log && $coupon_log->getOrderId()) {
             $sales_order_info = $this->orderRepository->loadByIncrementId($coupon_log->getOrderId());
         }
         $this->assign('coupon_log', $coupon_log);
@@ -34,12 +39,21 @@ class Trackinfo extends \Magento\Framework\View\Element\Template
         $this->assign('currencyCode', $currencyCode);
         return parent::_toHtml();
     }
-    public function DiscountAmountFormat($couponRuleId, $discount_amount){
+
+    /**
+     * discount amount format
+     *
+     * @param int $couponRuleId
+     * @param float|int $discount_amount
+     * @return string
+     */
+    public function discountAmountFormat($couponRuleId, $discount_amount)
+    {
         $couponRuleData = $this->_couponData->getCouponRuleData($couponRuleId);
         $simple_action = $couponRuleData->getSimpleAction();
-        if($simple_action == 'by_percent') {
+        if ($simple_action == 'by_percent') {
             $discount_amount .='%';
-        }elseif($simple_action == 'fixed'){
+        } elseif ($simple_action == 'fixed') {
             $discount_amount ='$'.$discount_amount;
         }
         return $discount_amount;

@@ -65,7 +65,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getEntityType()
     {
-        if (empty($this->_type)) {
+        if (!isset($this->_type) || (isset($this->_type) && empty($this->_type))) {
             $this->setType(\Magento\Catalog\Model\Product::ENTITY);
         }
     }
@@ -118,7 +118,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if ($object->getRuleId()) {
             //Set SalesRule Data
-            $salesrule = $this->lookupSalesRule($object->getId());
+            $salesrule = $this->lookupSalesRule($object->getRuleId());
             $object->setData($salesrule);
 
             //Set Customer Group Ids Data
