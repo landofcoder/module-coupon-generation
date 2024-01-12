@@ -5,14 +5,23 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends \Magento\Framework\App\Action\Action {
+class Index extends \Magento\Framework\App\Action\Action
+{
 
-     /**
+    /**
      * @var resultFactory
      */
     protected $resultFactory;
 
+    /**
+     * @var \Lof\CouponCode\Helper\Data
+     */
     protected $_couponHelper;
+
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
 
     /**
      * List of actions that are allowed for not authorized users.
@@ -50,7 +59,7 @@ class Index extends \Magento\Framework\App\Action\Action {
         if (!$this->getRequest()->isDispatched()) {
             parent::dispatch($request);
         }
-        
+
         $action = strtolower($this->getRequest()->getActionName());
         $pattern = '/^('.implode('|', $this->openActions).')$/i';
 

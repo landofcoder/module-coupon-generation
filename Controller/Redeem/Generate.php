@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2017 Landofcoder (https://www.landofcoder.com/)
@@ -38,13 +38,29 @@ class Generate extends Action
      */
     protected $_storeManager;
 
+    /**
+     * @var \Lof\CouponCode\Helper\Generator
+     */
 	protected $_generateHelper;
 
 	protected $couponGenerator;
 
 	protected $_resultPageFactory;
+
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
 	protected $_customerSession;
+
+    /**
+     * @var \Lof\CouponCode\Helper\Barcode39
+     */
 	protected $_barcode;
+
+    /**
+     * @var \Lof\CouponCode\Helper\Data
+     */
+    protected $_couponHelper;
 
 	public function __construct(
 		\Magento\Framework\App\Action\Context $context,
@@ -54,7 +70,7 @@ class Generate extends Action
 		\Lof\CouponCode\Helper\Generator $generateHelper,
 		\Magento\Customer\Model\Session $customerSession,
 		\Lof\CouponCode\Helper\Barcode39 $dataBarcode
-		){
+	) {
 		$this->_resultPageFactory  = $resultPageFactory;
 		$this->_storeManager       = $storeManager;
 		$this->_couponHelper       = $helper;
@@ -209,7 +225,7 @@ class Generate extends Action
 			                            'link_website' => $this->_storeManager->getStore()->getBaseUrl()
 			                        );
 
-				            $this->_couponHelper->sendMail($emailFrom,$customer_email,$emailidentifier,$templateVar); 
+				            $this->_couponHelper->sendMail($emailFrom,$customer_email,$emailidentifier,$templateVar);
 				            $this->messageManager->addSuccess(__('A coupon code has been sent to %1.', $customer_email));
 				            $responseData['message'] = __('A coupon code has been sent to %1.', $customer_email);
 				        } else {
@@ -247,6 +263,13 @@ class Generate extends Action
 	    }
         return;
 	}
+
+    /**
+     * xss clean
+     *
+     * @param mixed $data
+     * @return string|mixed
+     */
 	protected function xss_clean($data)
     {
         // Fix &entity\n;
