@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_CouponCode
  * @copyright  Copyright (c) 2017 Landofcoder (https://www.landofcoder.com/)
@@ -39,6 +39,8 @@ class Trackcode extends Action
 	protected $_resultPageFactory;
 	protected $_customerSession;
     protected $_coreRegistry;
+    protected $_couponHelper;
+
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory
      */
@@ -90,7 +92,7 @@ class Trackcode extends Action
 			}
 
 			if(0 < $collection->getSize()){
-				$this->_coreRegistry->register('lofcouponcode_log', $collection->getFirstItem());  
+				$this->_coreRegistry->register('lofcouponcode_log', $collection->getFirstItem());
 			}
 		}
         return $resultPage;
